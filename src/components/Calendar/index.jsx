@@ -1,10 +1,21 @@
-import { useWindowDimensions } from '../../hooks/useWindowDimensions'
-import { StyledCalendar } from './components'
+import { useTheme } from 'styled-components'
+import FullCalendar from '@fullcalendar/react'
+import dayGridPlugin from '@fullcalendar/daygrid'
+import interactionPlugin from '@fullcalendar/interaction'
 
-const Calendar = () => {
-  const { height } = useWindowDimensions()
 
-  return <StyledCalendar headerRender={() => null} height={height} />
+const Calendar = ({ calendarRef }) => {
+  const theme = useTheme()
+
+  return <FullCalendar
+    ref={calendarRef}
+    plugins={[dayGridPlugin, interactionPlugin]}
+    initialView='dayGridMonth'
+    headerToolbar={false}
+    height={`calc(100vh - ${theme.navbarHeight}px - 1em)`}
+    selectable
+  // themeSystem='bootstrap'
+  />
 
 }
 

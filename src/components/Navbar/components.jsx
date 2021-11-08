@@ -7,6 +7,7 @@ const { Text } = Typography
 export const NavbarContainer = styled.div`
   display: flex;
   align-items: center;
+  height: ${p => p.theme.navbarHeight};
   padding: 1em;
   margin-bottom: 1em;
   background-color: #fff;

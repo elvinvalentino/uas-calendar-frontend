@@ -1,26 +1,27 @@
-import { useEffect, useRef, useState } from 'react'
+import { useRef, useState, useEffect } from 'react'
 import { Container } from 'react-bootstrap'
 import { Row, Col } from 'antd'
 import EventTask from '../EvenTask'
 import Calendar from '../Calendar'
+import CalendarCategories from '../CalendarCategories'
 
 import { ExpandIndicator } from './components'
 
-const Content = () => {
+const Content = ({ calendarRef }) => {
   const [isExpanded, setIsExpanded] = useState(false)
-  const [maxHeight, setMaxHeight] = useState('100vh');
+  const [maxHeight, setMaxHeight] = useState('100vh')
   const calendarContainer = useRef()
 
   useEffect(() => {
-    function handleResize() {
+    const handleResize = () => {
       const height = calendarContainer.current.children[0].getBoundingClientRect().height
       setMaxHeight(height)
     }
-    handleResize()
+
+    handleResize();
     window.addEventListener('resize', handleResize)
     return () => window.removeEventListener('resize', handleResize)
-  }, [setMaxHeight])
-
+  }, [])
 
   return (
     <Container fluid>
@@ -33,10 +34,10 @@ const Content = () => {
             paddingRight: '1em'
           })
         }} >
-          <Calendar />
+          <Calendar calendarRef={calendarRef} />
         </Col>
-        {isExpanded && <Col span={5}>
-          test
+        {isExpanded && <Col span={5} style={{ maxHeight }}>
+          <CalendarCategories setIsExpanded={setIsExpanded} />
         </Col>}
       </Row>
       {!isExpanded && <ExpandIndicator onClick={() => setIsExpanded(true)} />}
