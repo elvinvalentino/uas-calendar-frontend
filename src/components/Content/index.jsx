@@ -7,7 +7,7 @@ import CalendarCategories from '../CalendarCategories'
 
 import { ExpandIndicator } from './components'
 
-const Content = ({ calendarRef }) => {
+const Content = ({ calendarRef, date, setDate, goToDate }) => {
   const [isExpanded, setIsExpanded] = useState(false)
   const [maxHeight, setMaxHeight] = useState('100vh')
   const calendarContainer = useRef()
@@ -37,7 +37,12 @@ const Content = ({ calendarRef }) => {
           <Calendar calendarRef={calendarRef} />
         </Col>
         {isExpanded && <Col span={5} style={{ maxHeight }}>
-          <CalendarCategories setIsExpanded={setIsExpanded} />
+          <CalendarCategories
+            setIsExpanded={setIsExpanded}
+            date={date}
+            setDate={setDate}
+            goToDate={goToDate}
+          />
         </Col>}
       </Row>
       {!isExpanded && <ExpandIndicator onClick={() => setIsExpanded(true)} />}

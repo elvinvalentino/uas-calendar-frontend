@@ -14,9 +14,9 @@ const Calendar = ({ calendarRef }) => {
     headerToolbar={false}
     height={`calc(100vh - ${theme.navbarHeight}px - 1em)`}
     selectable
-  // themeSystem='bootstrap'
   />
 
 }
+
 
 export default Calendar

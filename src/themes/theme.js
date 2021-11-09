@@ -8,7 +8,7 @@ const utilStyles = {
 export const theme = {
   color: {
     secondary: '#e6f7ff',
-    highlight: '#f5f5f5',
+    highlight: 'rgba(255,220,40,.15)',
   },
   backgroundColor: {
     main: '#fff',
