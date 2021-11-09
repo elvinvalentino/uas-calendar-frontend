@@ -40,4 +40,26 @@ export const GlobalStyles = createGlobalStyle`
   .fc .fc-highlight {
     background-color: ${p => p.theme.color.highlight};
   }
+
+  /* width */
+  ::-webkit-scrollbar {
+    width: 10px;
+  }
+
+  /* Track */
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: #ccc;
+    border-radius: 25px;
+    /* 0065c3 */
+  }
+
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: #888;
+  }
 `;
