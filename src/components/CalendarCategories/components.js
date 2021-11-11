@@ -3,6 +3,14 @@ import styled from 'styled-components';
 export const CategoryItemContainer = styled.div`
   display: flex;
   align-items: center;
+
+  & .more-indicator {
+    visibility: hidden;
+  }
+
+  &:hover .more-indicator {
+    visibility: visible;
+  }
 `;
 
 const indicatorSize = 30;

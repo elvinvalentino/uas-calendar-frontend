@@ -9,6 +9,7 @@ export const theme = {
   color: {
     secondary: '#e6f7ff',
     highlight: 'rgba(255,220,40,.15)',
+    danger: '#f5222d',
   },
   backgroundColor: {
     main: '#fff',

@@ -34,8 +34,17 @@ export const StyledEventTaskItemContent = styled.div`
   position: relative;
   display: flex;
   padding: 0.5em 1em;
+  padding-right: 0;
   align-items: center;
   z-index: 99990;
+
+  & .more-indicator {
+    visibility: hidden;
+  }
+
+  &:hover .more-indicator {
+    visibility: visible;
+  }
 `;
 
 const indicatorSize = 30;
