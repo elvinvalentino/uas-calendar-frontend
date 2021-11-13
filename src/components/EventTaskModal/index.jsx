@@ -86,6 +86,7 @@ const EventTaskModal = ({ onHide, overrideInitialValues = {}, ...rest }) => {
                   />
                 ) : (
                   <DatePicker
+                    allowClear={false}
                     name="dateStart"
                     className='w-100'
                     popupStyle={{ zIndex: 99999999 }}
