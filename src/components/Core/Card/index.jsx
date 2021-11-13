@@ -2,7 +2,7 @@ import { Card as AntdCard, Button } from 'antd'
 import { PlusOutlined } from '@ant-design/icons'
 import { useTheme } from 'styled-components'
 
-const Card = ({ ...rest }) => {
+const Card = ({ onExtraClick, ...rest }) => {
   const theme = useTheme();
 
   const headStyle = {
@@ -27,7 +27,7 @@ const Card = ({ ...rest }) => {
     }}
     headStyle={headStyle}
     bodyStyle={bodyStyle}
-    extra={<CardHeaderExtra />}
+    extra={<CardHeaderExtra onClick={onExtraClick} />}
     {...rest}
   />
 }

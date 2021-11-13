@@ -5,7 +5,10 @@ import { RightOutlined, MoreOutlined } from '@ant-design/icons'
 import Card from '../Core/Card'
 import SmallCalendar from '../SmallCalendar'
 import ListMenu from '../ListMenu'
+import CategoryModal from '../CategoryModal'
 import { CircleIndicator, CategoryItemContainer } from './components'
+import { useModal } from '../../hooks/useModal'
+
 
 const { Title, Text } = Typography
 
@@ -26,14 +29,22 @@ const CalendarCategories = ({ setIsExpanded, date, setDate, goToDate }) => {
 }
 
 const Categories = () => {
+  const { handleClose, handleOpen, isOpen } = useModal()
+
   return (
-    <Card title="My Categories">
-      <CategoryItem color="#ccc" text="Category 1" />
-      <CategoryItem color="#ccc" text="Category 2" />
-      <CategoryItem color="#ccc" text="Category 2" />
-      <CategoryItem color="#ccc" text="Category 2" />
-      <CategoryItem color="#ccc" text="Category 2" />
-    </Card>
+    <>
+      <CategoryModal
+        show={isOpen}
+        onHide={handleClose}
+      />
+      <Card title="My Categories" onExtraClick={handleOpen}>
+        <CategoryItem color="#ccc" text="Category 1" />
+        <CategoryItem color="#ccc" text="Category 2" />
+        <CategoryItem color="#ccc" text="Category 2" />
+        <CategoryItem color="#ccc" text="Category 2" />
+        <CategoryItem color="#ccc" text="Category 2" />
+      </Card>
+    </>
   )
 }
 

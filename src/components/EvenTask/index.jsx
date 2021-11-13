@@ -4,7 +4,9 @@ import Card from '../Core/Card'
 import { MoreOutlined } from '@ant-design/icons'
 
 import ListMenu from '../ListMenu'
+import EventTaskModal from '../EventTaskModal'
 import { StyledEventTaskItem, StyledEventTaskItemContent, CircleIndicator } from './components'
+import { useModal } from '../../hooks/useModal'
 
 const { Title, Text } = Typography
 
@@ -19,28 +21,52 @@ const EventTask = () => {
 }
 
 const Tasks = () => {
+  const { isOpen, handleOpen, handleClose } = useModal()
+
   return (
-    <Card title="My Tasks">
-      <EventTaskItem text='Task 1' type='task' checked />
-      <EventTaskItem text='Task 2' type='task' />
-      <EventTaskItem text='Task 3' type='task' />
-      <EventTaskItem text='Task 1' type='task' checked />
-      <EventTaskItem text='Task 2' type='task' />
-      <EventTaskItem text='Task 3' type='task' />
-      <EventTaskItem text='Task 1' type='task' checked />
-      <EventTaskItem text='Task 2' type='task' />
-      <EventTaskItem text='Task 3' type='task' />
-    </Card>
+    <>
+      <EventTaskModal
+        title='Add Task'
+        show={isOpen}
+        onHide={handleClose}
+        overrideInitialValues={{
+          type: 'Task'
+        }}
+      />
+      <Card title="My Tasks" onExtraClick={handleOpen}>
+        <EventTaskItem text='Task 1' type='task' checked />
+        <EventTaskItem text='Task 2' type='task' />
+        <EventTaskItem text='Task 3' type='task' />
+        <EventTaskItem text='Task 1' type='task' checked />
+        <EventTaskItem text='Task 2' type='task' />
+        <EventTaskItem text='Task 3' type='task' />
+        <EventTaskItem text='Task 1' type='task' checked />
+        <EventTaskItem text='Task 2' type='task' />
+        <EventTaskItem text='Task 3' type='task' />
+      </Card>
+    </>
   )
 }
 
 const Events = () => {
+  const { isOpen, handleOpen, handleClose } = useModal()
+
   return (
-    <Card title="My Events">
-      <EventTaskItem text='Event 1' type='event' />
-      <EventTaskItem text='Event 2' type='event' />
-      <EventTaskItem text='Event 3' type='event' />
-    </Card>
+    <>
+      <EventTaskModal
+        title='Add Task'
+        show={isOpen}
+        onHide={handleClose}
+        overrideInitialValues={{
+          type: 'Event'
+        }}
+      />
+      <Card title="My Events" onExtraClick={handleOpen}>
+        <EventTaskItem text='Event 1' type='event' />
+        <EventTaskItem text='Event 2' type='event' />
+        <EventTaskItem text='Event 3' type='event' />
+      </Card>
+    </>
   )
 }
 

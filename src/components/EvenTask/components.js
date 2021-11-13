@@ -14,7 +14,7 @@ export const StyledEventTaskItem = styled.div`
     width: 12px;
     background-color: ${p => p.color};
     border-radius: ${p => p.theme.border.radius}px;
-    z-index: 9999;
+    z-index: 100;
   }
 
   &:after {
@@ -26,7 +26,7 @@ export const StyledEventTaskItem = styled.div`
     width: 22px;
     background-color: #fff;
     border-radius: 10px;
-    z-index: 9999;
+    z-index: 100;
   }
 `;
 
@@ -36,7 +36,7 @@ export const StyledEventTaskItemContent = styled.div`
   padding: 0.5em 1em;
   padding-right: 0;
   align-items: center;
-  z-index: 99990;
+  z-index: 200;
 
   & .more-indicator {
     visibility: hidden;
