@@ -1,6 +1,6 @@
 const utilStyles = {
   border: {
-    radius: 5,
+    radius: 10,
   },
   navbarHeight: 60,
 };

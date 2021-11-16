@@ -5,8 +5,12 @@ export const GlobalStyles = createGlobalStyle`
     background-color: ${p => p.theme.backgroundColor.canvas} !important;
   }
 
+  /* antd override */
   .ant-picker-calendar,
-  .ant-picker-calendar .ant-picker-panel {
+  .ant-picker-calendar .ant-picker-panel,
+  .ant-input,
+  .ant-picker,
+  .ant-select-single:not(.ant-select-customize-input) .ant-select-selector{
     border-radius: ${p => p.theme.border.radius}px;
   }
 
@@ -39,6 +43,20 @@ export const GlobalStyles = createGlobalStyle`
 
   .fc .fc-highlight {
     background-color: ${p => p.theme.color.highlight};
+  }
+
+  .ant-radio-button-wrapper:first-child {
+    border-radius: ${p => p.theme.border.radius}px 0 0  ${p =>
+  p.theme.border.radius}px;
+  }
+
+  .ant-radio-button-wrapper:last-child {
+    border-radius: 0 ${p => p.theme.border.radius}px  ${p =>
+  p.theme.border.radius}px 0;
+  }
+  /* bootstrap override */
+  .modal-content {
+    border-radius: ${p => p.theme.border.radius}px;
   }
 
   /* width */

@@ -8,7 +8,8 @@ import CalendarCategories from '../CalendarCategories'
 import { ExpandIndicator } from './components'
 
 const Content = ({ calendarRef, date, setDate, goToDate }) => {
-  const [isExpanded, setIsExpanded] = useState(false)
+  const [isExpandedRight, setIsExpandedRight] = useState(false)
+  const [isExpandedLeft, setIsExpandedLeft] = useState(true)
   const [maxHeight, setMaxHeight] = useState('100vh')
   const calendarContainer = useRef()
 
@@ -23,29 +24,36 @@ const Content = ({ calendarRef, date, setDate, goToDate }) => {
     return () => window.removeEventListener('resize', handleResize)
   }, [])
 
+  let calendarSpan = 24
+  if (isExpandedRight) calendarSpan -= 5
+  if (isExpandedLeft) calendarSpan -= 5
   return (
     <Container fluid>
       <Row gutter={8}>
-        <Col span={5} style={{ maxHeight }}>
-          <EventTask />
-        </Col>
-        <Col span={isExpanded ? 14 : 19} ref={calendarContainer} style={{
-          ...(!isExpanded && {
+        {isExpandedLeft && <Col span={5} style={{ maxHeight }}>
+          <EventTask setIsExpanded={setIsExpandedLeft} />
+        </Col>}
+        <Col span={calendarSpan} ref={calendarContainer} style={{
+          ...(!isExpandedRight && {
             paddingRight: '1em'
+          }),
+          ...(!isExpandedLeft && {
+            paddingLeft: '1em'
           })
         }} >
           <Calendar calendarRef={calendarRef} />
         </Col>
-        {isExpanded && <Col span={5} style={{ maxHeight }}>
+        {isExpandedRight && <Col span={5} style={{ maxHeight }}>
           <CalendarCategories
-            setIsExpanded={setIsExpanded}
+            setIsExpanded={setIsExpandedRight}
             date={date}
             setDate={setDate}
             goToDate={goToDate}
           />
         </Col>}
       </Row>
-      {!isExpanded && <ExpandIndicator onClick={() => setIsExpanded(true)} />}
+      {!isExpandedRight && <ExpandIndicator position='right' onClick={() => setIsExpandedRight(true)} />}
+      {!isExpandedLeft && <ExpandIndicator position='left' onClick={() => setIsExpandedLeft(true)} />}
     </Container>
   )
 }

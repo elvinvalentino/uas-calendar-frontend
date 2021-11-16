@@ -1,8 +1,13 @@
-import { Form, Input, Radio, Checkbox, DatePicker, TimePicker, Button } from 'antd'
+import { useState } from 'react'
+import { Form, Input, Radio, Checkbox, DatePicker, TimePicker, Button, Row, Col, Select, Typography } from 'antd'
 import { Modal } from 'react-bootstrap'
 import { Formik } from 'formik'
 import moment from 'moment';
 import * as yup from 'yup'
+
+const { TextArea } = Input
+const { Option } = Select
+const { Text } = Typography
 
 const now = new Date()
 
@@ -24,11 +29,12 @@ const initialValues = {
   dateEnd: moment(now, 'yyyy-MM-DD'),
   timeStart: moment(now, 'HH:mm'),
   timeEnd: moment(now, 'HH:mm').add(1, 'h'),
-  categoryId: '',
-  isAllDay: false
+  categoryId: -1,
+  isAllDay: false,
 }
 
 const EventTaskModal = ({ onHide, overrideInitialValues = {}, ...rest }) => {
+  const [category, setCategory] = useState('')
 
   const onSubmit = (values) => {
     console.log({
@@ -54,13 +60,7 @@ const EventTaskModal = ({ onHide, overrideInitialValues = {}, ...rest }) => {
               <Modal.Title>Add {values.type}</Modal.Title>
             </Modal.Header>
             <Modal.Body>
-              <Form.Item>
-                <Radio.Group name='type' onChange={handleChange} defaultValue={values.type}>
-                  <Radio.Button value="Event">EVENT</Radio.Button>
-                  <Radio.Button value="Task">TASK</Radio.Button>
-                </Radio.Group>
 
-              </Form.Item>
               <Form.Item label="Title">
                 <Input
                   size="large"
@@ -70,35 +70,56 @@ const EventTaskModal = ({ onHide, overrideInitialValues = {}, ...rest }) => {
                   value={values.title}
                 />
               </Form.Item>
-
-              <Form.Item label="Date" className={values.isAllDay ? 'm-0' : ''}>
-                {values.isAllDay ? (
-                  <DatePicker.RangePicker
-                    allowClear={false}
-                    size='large'
-                    className='w-100'
-                    popupStyle={{ zIndex: 99999999 }}
-                    defaultValue={[values.dateStart, values.dateEnd]}
-                    onChange={([newDateStart, newDateEnd]) => {
-                      setFieldValue('dateStart', newDateStart)
-                      setFieldValue('dateEnd', newDateEnd)
-                    }}
-                  />
-                ) : (
-                  <DatePicker
-                    allowClear={false}
-                    name="dateStart"
-                    className='w-100'
-                    popupStyle={{ zIndex: 99999999 }}
-                    size='large'
-                    onChange={(date) => {
-                      setFieldValue('dateStart', date)
-                      setFieldValue('dateEnd', date)
-                    }}
-                    defaultValue={values.dateStart}
-                  />
-                )}
+              <Form.Item label="Description">
+                <TextArea
+                  size="large"
+                  rows={3}
+                  name="description"
+                  placeholder='Add description...'
+                  onChange={handleChange}
+                  value={values.description}
+                />
               </Form.Item>
+              <Row gutter={8}>
+                <Col span={8} className='d-flex align-items-end'>
+                  <Form.Item className={values.isAllDay ? 'm-0' : ''}>
+                    <Radio.Group name='type' size="large" onChange={handleChange} defaultValue={values.type}>
+                      <Radio.Button className='left-border-rounded' value="Event">EVENT</Radio.Button>
+                      <Radio.Button className='right-border-rounded' value="Task">TASK</Radio.Button>
+                    </Radio.Group>
+                  </Form.Item>
+                </Col>
+                <Col span={16}>
+                  <Form.Item label="Date" className={values.isAllDay ? 'm-0' : ''}>
+                    {values.isAllDay ? (
+                      <DatePicker.RangePicker
+                        allowClear={false}
+                        size='large'
+                        className='w-100'
+                        popupStyle={{ zIndex: 99999999 }}
+                        defaultValue={[values.dateStart, values.dateEnd]}
+                        onChange={([newDateStart, newDateEnd]) => {
+                          setFieldValue('dateStart', newDateStart)
+                          setFieldValue('dateEnd', newDateEnd)
+                        }}
+                      />
+                    ) : (
+                      <DatePicker
+                        allowClear={false}
+                        name="dateStart"
+                        className='w-100'
+                        popupStyle={{ zIndex: 99999999 }}
+                        size='large'
+                        onChange={(date) => {
+                          setFieldValue('dateStart', date)
+                          setFieldValue('dateEnd', date)
+                        }}
+                        defaultValue={values.dateStart}
+                      />
+                    )}
+                  </Form.Item>
+                </Col>
+              </Row>
               {!values.isAllDay && (
                 <>
                   <Form.Item label="Time" className='m-0'>
@@ -126,14 +147,21 @@ const EventTaskModal = ({ onHide, overrideInitialValues = {}, ...rest }) => {
                   All day
                 </Checkbox>
               </Form.Item>
-              <Form.Item label="Description">
-                <Input
-                  size="large"
-                  name="description"
-                  placeholder='Add description...'
-                  onChange={handleChange}
-                  value={values.description}
-                />
+              <Form.Item label='Category'>
+                <Select
+                  size='large'
+                  showSearch
+                  placeholder="Select a person"
+                  dropdownStyle={{ zIndex: 99999999 }}
+                  onSearch={value => setCategory(value)}
+                  notFoundContent={<SelectNotFound text={category} />}
+                  optionFilterProp='data'
+                  onChange={value => setFieldValue('categoryId', value)}
+                >
+                  {['Tugas ce deli', 'Tuugas ko jimmy', 'Webinar'].map((v, idx) => (
+                    <Option value={idx} data={v}>{v}</Option>
+                  ))}
+                </Select>
               </Form.Item>
             </Modal.Body>
             <Modal.Footer>
@@ -148,6 +176,12 @@ const EventTaskModal = ({ onHide, overrideInitialValues = {}, ...rest }) => {
         )}
       </Formik>
     </Modal>
+  )
+}
+
+const SelectNotFound = ({ text }) => {
+  return (
+    <Text>Create "{text}"</Text>
   )
 }
 

@@ -1,7 +1,7 @@
 import { Stack } from 'react-bootstrap'
 import { Typography, Button, Dropdown } from 'antd'
 import Card from '../Core/Card'
-import { MoreOutlined } from '@ant-design/icons'
+import { MoreOutlined, LeftOutlined } from '@ant-design/icons'
 
 import ListMenu from '../ListMenu'
 import EventTaskModal from '../EventTaskModal'
@@ -10,9 +10,15 @@ import { useModal } from '../../hooks/useModal'
 
 const { Title, Text } = Typography
 
-const EventTask = () => {
+const EventTask = ({ setIsExpanded }) => {
   return (
-    <Stack gap={2} className='h-100'>
+    <Stack gap={2} className='position-relative h-100'>
+      <Button
+        type="text"
+        icon={<LeftOutlined style={{ color: '#ccc' }} />}
+        className='position-absolute top-0 end-0'
+        onClick={() => setIsExpanded(false)}
+      />
       <Title level={5} style={{ textAlign: 'center', marginBottom: 5 }}>My Tasks & Events</Title>
       <Tasks />
       <Events />
@@ -84,7 +90,7 @@ const EventTaskItem = ({ text, checked = false, color = '#ccc', type }) => {
           trigger={['click']}
           overlayStyle={{ zIndex: 99999999 }}
         >
-          <Button type='text' className='more-indicator' icon={<MoreOutlined style={{ color: '#858585' }} />} />
+          <Button type='text' className='more-indicator' icon={<MoreOutlined style={{ color: '#858585', fontSize: '1.1em' }} />} />
         </Dropdown>
       </StyledEventTaskItemContent>
     </StyledEventTaskItem>

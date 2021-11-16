@@ -18,7 +18,7 @@ const CalendarCategories = ({ setIsExpanded, date, setDate, goToDate }) => {
       <Button
         type="text"
         icon={<RightOutlined style={{ color: '#ccc' }} />}
-        className='position-absolute top-0 left-0'
+        className='position-absolute top-0 start-0'
         onClick={() => setIsExpanded(false)}
       />
       <Title level={5} style={{ textAlign: 'center', marginBottom: 5 }}>Welcome, User</Title>
@@ -61,7 +61,7 @@ const CategoryItem = ({ color, text }) => {
         trigger={['click']}
         overlayStyle={{ zIndex: 99999999 }}
       >
-        <Button type='text' className='more-indicator' icon={<MoreOutlined style={{ color: '#858585' }} />} />
+        <Button type='text' className='more-indicator' icon={<MoreOutlined style={{ color: '#858585', fontSize: '1.1em' }} />} />
       </Dropdown>
     </CategoryItemContainer>
   )
