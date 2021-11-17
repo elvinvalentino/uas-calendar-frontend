@@ -40,7 +40,7 @@ const CategoryModal = ({ onHide, overrideInitialValues = {}, ...rest }) => {
                 <Input
                   size="large"
                   name="name"
-                  placeholder='Add title...'
+                  placeholder='Add name...'
                   onChange={handleChange}
                   value={values.title}
                 />

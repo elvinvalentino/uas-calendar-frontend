@@ -1,7 +1,7 @@
 import { Stack } from 'react-bootstrap'
-import { Typography, Button, Dropdown } from 'antd'
+import { Typography, Button, Dropdown, Modal } from 'antd'
 import Card from '../Core/Card'
-import { MoreOutlined, LeftOutlined } from '@ant-design/icons'
+import { MoreOutlined, LeftOutlined, ExclamationCircleOutlined } from '@ant-design/icons'
 
 import ListMenu from '../ListMenu'
 import EventTaskModal from '../EventTaskModal'
@@ -32,12 +32,13 @@ const Tasks = () => {
   return (
     <>
       <EventTaskModal
-        title='Add Task'
         show={isOpen}
         onHide={handleClose}
         overrideInitialValues={{
           type: 'Task'
         }}
+        centered
+        backdrop='static'
       />
       <Card title="My Tasks" onExtraClick={handleOpen}>
         <EventTaskItem text='Task 1' type='task' checked />
@@ -60,12 +61,13 @@ const Events = () => {
   return (
     <>
       <EventTaskModal
-        title='Add Task'
         show={isOpen}
         onHide={handleClose}
         overrideInitialValues={{
           type: 'Event'
         }}
+        centered
+        backdrop='static'
       />
       <Card title="My Events" onExtraClick={handleOpen}>
         <EventTaskItem text='Event 1' type='event' />
@@ -77,6 +79,18 @@ const Events = () => {
 }
 
 const EventTaskItem = ({ text, checked = false, color = '#ccc', type }) => {
+  const deleteConfirm = () => {
+    Modal.confirm({
+      title: 'Are you sure?',
+      icon: <ExclamationCircleOutlined />,
+      content: `Are you sure want to delete this ${type}?`,
+      okText: 'Delete',
+      cancelText: 'Cancel',
+      okType: 'danger',
+      centered: true
+    })
+  }
+
   return (
     <StyledEventTaskItem color={color} className='mb-2'>
       <StyledEventTaskItemContent>
@@ -84,7 +98,7 @@ const EventTaskItem = ({ text, checked = false, color = '#ccc', type }) => {
         <Text className='flex-grow-1'>{text}</Text>
         <Dropdown
           overlay={
-            <ListMenu onEditClick={() => null} onDeleteClick={() => null} type={type} />
+            <ListMenu onEditClick={() => null} onDeleteClick={deleteConfirm} type={type} />
           }
           placement='bottomRight'
           trigger={['click']}

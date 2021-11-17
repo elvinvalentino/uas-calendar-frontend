@@ -5,11 +5,12 @@ import { Formik } from 'formik'
 import moment from 'moment';
 import * as yup from 'yup'
 
+import { NotFoundContainer } from './components'
+
 const { TextArea } = Input
 const { Option } = Select
 const { Text } = Typography
 
-const now = new Date()
 
 const validationSchema = yup.object({
   title: yup.string().required(),
@@ -21,20 +22,26 @@ const validationSchema = yup.object({
   categoryId: yup.string().required(),
 })
 
-const initialValues = {
-  title: '',
-  description: '',
-  type: 'Event',
-  dateStart: moment(now, 'yyyy-MM-DD'),
-  dateEnd: moment(now, 'yyyy-MM-DD'),
-  timeStart: moment(now, 'HH:mm'),
-  timeEnd: moment(now, 'HH:mm').add(1, 'h'),
-  categoryId: -1,
-  isAllDay: false,
+const getInitialValues = () => {
+  const now = moment()
+  let timeEnd = moment(now, 'HH:mm').add(1, 'h');
+  if (!timeEnd.isSame(now, 'day')) timeEnd = moment(now).hour(23).minute(59)
+  return {
+    title: '',
+    description: '',
+    type: 'Event',
+    dateStart: now,
+    dateEnd: now,
+    timeStart: now,
+    timeEnd,
+    categoryId: -1,
+    isAllDay: false,
+  }
 }
 
 const EventTaskModal = ({ onHide, overrideInitialValues = {}, ...rest }) => {
   const [category, setCategory] = useState('')
+  const initialValues = getInitialValues()
 
   const onSubmit = (values) => {
     console.log({
@@ -151,14 +158,14 @@ const EventTaskModal = ({ onHide, overrideInitialValues = {}, ...rest }) => {
                 <Select
                   size='large'
                   showSearch
-                  placeholder="Select a person"
+                  placeholder="Select a category"
                   dropdownStyle={{ zIndex: 99999999 }}
                   onSearch={value => setCategory(value)}
                   notFoundContent={<SelectNotFound text={category} />}
                   optionFilterProp='data'
                   onChange={value => setFieldValue('categoryId', value)}
                 >
-                  {['Tugas ce deli', 'Tuugas ko jimmy', 'Webinar'].map((v, idx) => (
+                  {['Nugas', 'Meeting', 'Webinar'].map((v, idx) => (
                     <Option value={idx} data={v}>{v}</Option>
                   ))}
                 </Select>
@@ -181,7 +188,9 @@ const EventTaskModal = ({ onHide, overrideInitialValues = {}, ...rest }) => {
 
 const SelectNotFound = ({ text }) => {
   return (
-    <Text>Create "{text}"</Text>
+    <NotFoundContainer onClick={() => console.log('Show color picker')}>
+      <Text>+ Create "{text}"</Text>
+    </NotFoundContainer>
   )
 }
 

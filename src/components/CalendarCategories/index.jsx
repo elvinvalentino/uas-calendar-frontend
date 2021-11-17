@@ -1,6 +1,6 @@
 import { Stack } from 'react-bootstrap'
-import { Button, Typography, Dropdown } from 'antd'
-import { RightOutlined, MoreOutlined } from '@ant-design/icons'
+import { Button, Typography, Dropdown, Modal } from 'antd'
+import { RightOutlined, MoreOutlined, ExclamationCircleOutlined } from '@ant-design/icons'
 
 import Card from '../Core/Card'
 import SmallCalendar from '../SmallCalendar'
@@ -36,6 +36,8 @@ const Categories = () => {
       <CategoryModal
         show={isOpen}
         onHide={handleClose}
+        centered
+        backdrop='static'
       />
       <Card title="My Categories" onExtraClick={handleOpen}>
         <CategoryItem color="#ccc" text="Category 1" />
@@ -49,13 +51,25 @@ const Categories = () => {
 }
 
 const CategoryItem = ({ color, text }) => {
+  const deleteConfirm = () => {
+    Modal.confirm({
+      title: 'Are you sure?',
+      icon: <ExclamationCircleOutlined />,
+      content: `Are you sure want to delete this category?`,
+      okText: 'Delete',
+      cancelText: 'Cancel',
+      okType: 'danger',
+      centered: true
+    })
+  }
+
   return (
     <CategoryItemContainer className="mb-2">
       <CircleIndicator color={color} />
       <Text style={{ flex: 1 }}>{text}</Text>
       <Dropdown
         overlay={
-          <ListMenu onEditClick={() => null} onDeleteClick={() => null} type='category' />
+          <ListMenu onEditClick={() => null} onDeleteClick={deleteConfirm} type='category' />
         }
         placement='bottomRight'
         trigger={['click']}
