@@ -6,15 +6,18 @@ import { LocalizationProvider } from '@mui/lab';
 import { ThemeProvider } from 'styled-components';
 import { theme } from './themes/theme';
 
+import { AuthProvider } from './contexts/auth';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'antd/dist/antd.css';
 
 ReactDOM.render(
   <React.StrictMode>
     <ThemeProvider theme={theme}>
-      <LocalizationProvider dateAdapter={DateAdapter}>
-        <App />
-      </LocalizationProvider>
+      <AuthProvider>
+        <LocalizationProvider dateAdapter={DateAdapter}>
+          <App />
+        </LocalizationProvider>
+      </AuthProvider>
     </ThemeProvider>
   </React.StrictMode>,
   document.getElementById('root')

@@ -30,7 +30,22 @@ const Calendar = ({ calendarRef }) => {
     handleOpen()
   }
 
-  console.log(selectedDateRange[0].valueOf(), selectedDateRange[1].valueOf());
+  const events = [
+    {
+      title: 'event1',
+      start: '2021-11-01',
+      allDay: false
+    },
+    {
+      title: 'event2',
+      start: '2021-11-05',
+      end: '2021-11-07'
+    },
+    {
+      title: 'event3',
+      start: '2021-11-09T12:30:00',
+    }
+  ]
 
 
   return (
@@ -54,6 +69,7 @@ const Calendar = ({ calendarRef }) => {
         height={`calc(100vh - ${theme.navbarHeight}px - 1em)`}
         select={onSelect}
         selectable
+        events={events}
       />
     </>
   )
