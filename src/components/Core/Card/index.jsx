@@ -14,7 +14,8 @@ const Card = ({ onExtraClick, ...rest }) => {
   const bodyStyle = {
     padding: '.5em 1em',
     flex: 1,
-    overflow: 'auto'
+    overflow: 'auto',
+    textAlign: 'center'
   }
 
   return <AntdCard

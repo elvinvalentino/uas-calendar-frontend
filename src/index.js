@@ -7,6 +7,7 @@ import { ThemeProvider } from 'styled-components';
 import { theme } from './themes/theme';
 
 import { AuthProvider } from './contexts/auth';
+import { DataProvider } from './contexts/data';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'antd/dist/antd.css';
 
@@ -14,9 +15,11 @@ ReactDOM.render(
   <React.StrictMode>
     <ThemeProvider theme={theme}>
       <AuthProvider>
-        <LocalizationProvider dateAdapter={DateAdapter}>
-          <App />
-        </LocalizationProvider>
+        <DataProvider>
+          <LocalizationProvider dateAdapter={DateAdapter}>
+            <App />
+          </LocalizationProvider>
+        </DataProvider>
       </AuthProvider>
     </ThemeProvider>
   </React.StrictMode>,

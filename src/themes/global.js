@@ -10,8 +10,13 @@ export const GlobalStyles = createGlobalStyle`
   .ant-picker-calendar .ant-picker-panel,
   .ant-input,
   .ant-picker,
+  .ant-btn,
   .ant-select-single:not(.ant-select-customize-input) .ant-select-selector{
     border-radius: ${p => p.theme.border.radius}px;
+  }
+
+  .ant-btn.ant-btn-circle {
+    border-radius: 50%;
   }
 
   .ant-card-head-title,

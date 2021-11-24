@@ -5,6 +5,8 @@ export const StyledEventTaskItem = styled.div`
   border: 1px solid #ccc;
   overflow: hidden;
   border-radius: ${p => p.theme.border.radius}px;
+  text-align: left;
+
   &:before {
     content: '';
     position: absolute;

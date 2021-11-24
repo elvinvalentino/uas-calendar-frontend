@@ -1,17 +1,40 @@
-import { useRef, useState } from 'react';
+import { useRef, useState, useEffect, useContext } from 'react';
 import moment from 'moment'
 
 import Navbar from './components/Navbar'
 import Content from './components/Content'
+import { DataContext } from './contexts/data'
+import { AuthContext } from './contexts/auth'
 import { GlobalStyles } from './themes/global';
+import Service from './utils/Service'
+import { getToken } from './utils/getToken';
 
 const App = () => {
   const now = new Date();
+  const { setData, setIsFetchData } = useContext(DataContext)
+  const { isAuthenticate, user } = useContext(AuthContext)
 
   const calendarRef = useRef()
   const [date, setDate] = useState(moment(now))
   const [dateSmall, setDateSmall] = useState(moment(now))
 
+  useEffect(() => {
+    if (isAuthenticate) {
+      console.log('fetch');
+      (async () => {
+        try {
+          setIsFetchData(true)
+          const token = getToken()
+          const [categories, events] = await Promise.all([Service.fetchCategory(token), Service.fetchEvent(token)])
+          setData('category', categories)
+          setData('event', events)
+          setIsFetchData(false)
+        } catch (err) {
+          console.log(err)
+        }
+      })()
+    }
+  }, [setData, isAuthenticate, setIsFetchData, user._id])
 
   const today = () => {
     const calendarApi = calendarRef.current.getApi()

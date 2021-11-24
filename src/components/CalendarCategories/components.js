@@ -3,6 +3,7 @@ import styled from 'styled-components';
 export const CategoryItemContainer = styled.div`
   display: flex;
   align-items: center;
+  text-align: left;
 
   & .more-indicator {
     visibility: hidden;

@@ -3,6 +3,7 @@ import { LeftOutlined, RightOutlined, LogoutOutlined, ReloadOutlined } from '@an
 import { Button, Avatar, Menu, Dropdown } from 'antd'
 import { GoogleLogin, useGoogleLogin } from 'react-google-login';
 import { AuthContext } from '../../contexts/auth'
+import { DataContext } from '../../contexts/data'
 import moment from 'moment';
 
 import axios from '../../axios'
@@ -12,6 +13,13 @@ import { NavbarContainer, NavbarSide, NavbarCenter, NavbarContent, NavbarContent
 const Navbar = ({ date, prevMonth, nextMonth, today }) => {
   const [time, setTime] = useState(moment().format('HH:mm:ss'))
   const { isAuthenticate, login, user, logout } = useContext(AuthContext)
+  const { setData } = useContext(DataContext)
+
+  const onLogout = () => {
+    setData('event', [])
+    setData('category', [])
+    logout()
+  }
 
 
   const responseGoogle = async (response) => {
@@ -50,7 +58,7 @@ const Navbar = ({ date, prevMonth, nextMonth, today }) => {
       <NavbarSide alignRight>
         <Button className={isAuthenticate ? 'me-3' : 'me-2'} onClick={today}>Today</Button>
         {isAuthenticate ? (
-          <Dropdown overlay={<AvatarMenu onChangeAccount={signIn} onLogout={logout} />} placement='bottomRight' trigger={['click']}>
+          <Dropdown overlay={<AvatarMenu onChangeAccount={signIn} onLogout={onLogout} />} placement='bottomRight' trigger={['click']}>
             <Avatar src={user?.profilePicture} />
           </Dropdown>
         ) : (
