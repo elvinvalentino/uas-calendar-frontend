@@ -6,12 +6,18 @@ export const LOGOUT = 'LOGOUT'
 
 const initialState = {
   isAuthenticate: Boolean(localStorage.getItem('token')),
-  user: localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')) : null
+  user: localStorage.getItem('user')
+    ? JSON.parse(localStorage.getItem('user'))
+    : {
+      _id: null
+    }
 }
 
 const AuthContext = createContext({
   isAuthenticate: false,
-  user: null,
+  user: {
+    _id: null
+  },
   login: () => null,
   logout: () => null
 })
@@ -27,7 +33,10 @@ const authReducer = (state, action) => {
     case LOGOUT:
       return {
         ...state,
-        isAuthenticate: false
+        isAuthenticate: false,
+        user: {
+          _id: null
+        }
       }
     default:
       return state
