@@ -1,26 +1,35 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import moment from 'moment'
 import { useTheme } from 'styled-components'
 import FullCalendar from '@fullcalendar/react'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import interactionPlugin from '@fullcalendar/interaction'
 
+import Service from '../../utils/Service'
 import EventTaskModal from '../EventTaskModal'
 import { useModal } from '../../hooks/useModal'
 
 
 const Calendar = ({ calendarRef }) => {
   const now = moment()
-  const { isOpen, handleClose, handleOpen } = useModal()
   const [selectedDateRange, setSelectedDateRange] = useState([now, now])
+  const [nationalHolidays, setNationalHolidays] = useState([])
+
+  const { isOpen, handleClose, handleOpen } = useModal()
   const theme = useTheme()
 
-  // const onDateClick = ({ date }) => {
-  //   console.log('click');
-  //   date = moment(date)
-  //   setSelectedDateRange([date, date])
-  //   handleOpen()
-  // }
+  useEffect(() => {
+    console.log('fetch');
+    (async () => {
+      try {
+        const response = await Service.fetchNationalHoliday()
+        setNationalHolidays(response)
+      } catch (err) {
+        console.log(err)
+      }
+    })()
+  }, [])
+
 
   const onSelect = ({ start, end }) => {
     console.log('onSelect');
@@ -30,11 +39,19 @@ const Calendar = ({ calendarRef }) => {
     handleOpen()
   }
 
+  console.log(nationalHolidays)
+
   const events = [
+    ...nationalHolidays.map(nh => ({
+      title: nh.holiday_name,
+      start: nh.holiday_date,
+      allDay: true,
+      backgroundColor: '#0E743F',
+    })),
     {
       title: 'event1',
-      start: '2021-11-01',
-      allDay: false
+      start: '2021-11-01 12:00',
+      allDay: true
     },
     {
       title: 'event2',

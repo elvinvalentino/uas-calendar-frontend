@@ -1,6 +1,13 @@
 import axios from '../axios';
 
 class Service {
+  async fetchNationalHoliday() {
+    const { data } = await axios.get(
+      `https://api-harilibur.vercel.app/api?year=${new Date().getFullYear()}`
+    );
+    return data;
+  }
+
   async fetchCategory(token) {
     const { data } = await axios.get(`/api/categories?token=${token}`);
     return data;

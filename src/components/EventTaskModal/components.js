@@ -12,3 +12,12 @@ export const NotFoundContainer = styled.div`
     background-color: #f5f5f5;
   }
 `;
+
+const indicatorSize = 30;
+export const CircleIndicator = styled.div`
+  width: ${indicatorSize}px;
+  height: ${indicatorSize}px;
+  background-color: ${p => p.color};
+  border-radius: 25px;
+  margin-right: 1em;
+`;

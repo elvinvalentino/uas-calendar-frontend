@@ -48,7 +48,7 @@ const CategoryModal = ({ action = 'create', onHide, overrideInitialValues = {}, 
         initialValues={{ ...initialValues, ...overrideInitialValues }}
         validationSchema={validationSchema}
       >
-        {({ values, handleChange, setFieldValue, handleSubmit, isSubmitting, errors }) => (
+        {({ values, handleChange, setFieldValue, handleSubmit, isSubmitting, errors, touched, handleBlur }) => (
           <Form
             onFinish={handleSubmit}
             layout='vertical'
@@ -59,14 +59,15 @@ const CategoryModal = ({ action = 'create', onHide, overrideInitialValues = {}, 
             <Modal.Body>
               <Form.Item
                 label="Name"
-                validateStatus={errors.name ? 'error' : ''}
-                help={errors.name}
+                validateStatus={Boolean(touched.name && errors.name) ? 'error' : ''}
+                help={Boolean(touched.name && errors.name) && errors.name}
               >
                 <Input
                   size="large"
                   name="name"
                   placeholder='Add name...'
                   onChange={handleChange}
+                  onBlur={handleBlur}
                   value={values.name}
                 />
               </Form.Item>
