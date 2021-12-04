@@ -1,10 +1,12 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useContext } from 'react'
 import moment from 'moment'
 import { useTheme } from 'styled-components'
 import FullCalendar from '@fullcalendar/react'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import interactionPlugin from '@fullcalendar/interaction'
+import { Modal } from 'react-bootstrap'
 
+import { DataContext } from '../../contexts/data'
 import Service from '../../utils/Service'
 import EventTaskModal from '../EventTaskModal'
 import { useModal } from '../../hooks/useModal'
@@ -12,10 +14,13 @@ import { useModal } from '../../hooks/useModal'
 
 const Calendar = ({ calendarRef }) => {
   const now = moment()
+  const { events: eventDatas } = useContext(DataContext)
   const [selectedDateRange, setSelectedDateRange] = useState([now, now])
+  const [selectedEvent, setSelectedEvent] = useState({})
   const [nationalHolidays, setNationalHolidays] = useState([])
 
   const { isOpen, handleClose, handleOpen } = useModal()
+  const { isOpen: isEventDetailOpen, handleClose: handleEventDetailClose, handleOpen: handleEventDetailOpen } = useModal()
   const theme = useTheme()
 
   useEffect(() => {
@@ -39,29 +44,30 @@ const Calendar = ({ calendarRef }) => {
     handleOpen()
   }
 
-  console.log(nationalHolidays)
-
   const events = [
     ...nationalHolidays.map(nh => ({
       title: nh.holiday_name,
       start: nh.holiday_date,
       allDay: true,
-      backgroundColor: '#0E743F',
+      color: '#0E743F',
+      extendedProps: {
+        isPreset: true
+      }
     })),
-    {
-      title: 'event1',
-      start: '2021-11-01 12:00',
-      allDay: true
-    },
-    {
-      title: 'event2',
-      start: '2021-11-05',
-      end: '2021-11-07'
-    },
-    {
-      title: 'event3',
-      start: '2021-11-09T12:30:00',
-    }
+    ...eventDatas.map(e => ({
+      title: e.title,
+      start: new Date(e.dateStart),
+      end: e.isAllDay
+        ? new Date(moment(e.dateEnd).add(1, 'day').valueOf())
+        : new Date(e.dateEnd),
+      allDay: e.isAllDay,
+      color: e.category.hex,
+      textColor: e.isAllDay ? '#fff' : '#000',
+      extendedProps: {
+        ...e,
+        isPreset: false
+      }
+    })),
   ]
 
 
@@ -71,12 +77,20 @@ const Calendar = ({ calendarRef }) => {
         title='Add Event'
         show={isOpen}
         onHide={handleClose}
+        backdrop='static'
+        centered
         overrideInitialValues={{
           type: 'Event',
           dateStart: selectedDateRange[0],
           dateEnd: selectedDateRange[1],
           isAllDay: !selectedDateRange[0].isSame(selectedDateRange[1], 'day')
         }}
+      />
+      <EventDetailModal
+        show={isEventDetailOpen}
+        onHide={handleEventDetailClose}
+        event={selectedEvent}
+        centered
       />
       <FullCalendar
         ref={calendarRef}
@@ -87,10 +101,28 @@ const Calendar = ({ calendarRef }) => {
         select={onSelect}
         selectable
         events={events}
+        dayMaxEventRows={5}
+        dayMaxEvents
+        eventClick={info => {
+          if (info.event.extendedProps.isPreset) return
+          setSelectedEvent(info.event.extendedProps)
+          handleEventDetailOpen()
+          // alert(info.event.extendedProps._id)
+        }}
       />
     </>
   )
 
+}
+
+const EventDetailModal = ({ onHide, event, ...rest }) => {
+  return (
+    <Modal onHide={onHide} {...rest}>
+      <Modal.Body>
+        {event._id} {event.title}
+      </Modal.Body>
+    </Modal>
+  )
 }
 
 

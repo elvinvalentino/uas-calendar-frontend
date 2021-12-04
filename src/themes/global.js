@@ -55,6 +55,11 @@ export const GlobalStyles = createGlobalStyle`
   p.theme.border.radius}px;
   }
 
+  .fc-daygrid-dot-event .fc-event-time,
+  .fc-daygrid-dot-event .fc-event-title {
+    color: ${p => p.theme.fontColor.main}
+  }
+
   .ant-radio-button-wrapper:last-child {
     border-radius: 0 ${p => p.theme.border.radius}px  ${p =>
   p.theme.border.radius}px 0;
