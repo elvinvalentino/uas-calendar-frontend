@@ -1,4 +1,4 @@
-import { useContext } from 'react'
+import { useContext, useState } from 'react'
 import { Stack } from 'react-bootstrap'
 import { Typography, Button, Dropdown, Modal } from 'antd'
 import Card from '../Core/Card'
@@ -13,7 +13,10 @@ import { DataContext } from '../../contexts/data'
 import { AuthContext } from '../../contexts/auth'
 import Service from '../../utils/Service'
 import { getToken } from '../../utils/getToken';
+import { getFormattedDate } from '../../utils/date'
+
 import moment from 'moment'
+
 
 const { Title, Text } = Typography
 
@@ -94,9 +97,33 @@ const Events = () => {
 }
 
 const EventTaskItem = ({ data, type }) => {
+  const [isHoverMore, setIsHoverMore] = useState(false)
   const { handleClose, handleOpen, isOpen } = useModal()
-  const { deleteData } = useContext(DataContext)
+  const { deleteData, updateData } = useContext(DataContext)
   const { isAuthenticate } = useContext(AuthContext)
+
+  const handleOnClick = async () => {
+    if (data.type === 'Event' || isHoverMore) return
+    if (!isAuthenticate) return
+    const token = getToken()
+
+    const { dateStart, dateEnd, ...restValues } = data
+
+    const formattedValues = {
+      ...restValues,
+      dateStart: `${moment(dateStart).format('YYYY-MM-DD HH:MM')}+0700`,
+      dateEnd: `${moment(dateEnd).format('YYYY-MM-DD HH:MM')}+0700`,
+    }
+
+    updateData('event', {
+      ...data,
+      isDone: !data.isDone
+    })
+    await Service.updateEvent(token, data._id, {
+      ...formattedValues,
+      isDone: !data.isDone
+    });
+  }
 
   const deleteConfirm = () => {
     Modal.confirm({
@@ -134,10 +161,21 @@ const EventTaskItem = ({ data, type }) => {
         backdrop='static'
         action='update'
       />
-      <StyledEventTaskItem color={data.category.hex} className='mb-2'>
+      <StyledEventTaskItem color={data.category.hex} className='mb-2' onClick={handleOnClick}>
         <StyledEventTaskItemContent>
-          <CircleIndicator color={data.category.hex} checked={data.type === 'Task' ? data.isDone : false} />
-          <Text className='flex-grow-1'>{data.title}</Text>
+          <CircleIndicator color={data.category.hex} checked={data.type === 'Task' ? data.isDone : moment().isAfter(data.dateStart)} />
+          <div className='flex-grow-1'>
+            <Text className='d-block fw-bold' style={{
+              ...((data.type === 'Task' && data.isDone) && {
+                textDecoration: 'line-through'
+              })
+            }}>
+              {data.title}
+            </Text>
+            <Text type='secondary'>
+              {getFormattedDate(data.dateStart)}
+            </Text>
+          </div>
           <Dropdown
             overlay={
               <ListMenu onEditClick={handleOpen} onDeleteClick={deleteConfirm} type={data.type.toLowerCase()} />
@@ -146,7 +184,7 @@ const EventTaskItem = ({ data, type }) => {
             trigger={['click']}
             overlayStyle={{ zIndex: 99999999 }}
           >
-            <Button type='text' className='more-indicator' icon={<MoreOutlined style={{ color: '#858585', fontSize: '1.1em' }} />} />
+            <Button onMouseEnter={() => setIsHoverMore(true)} onMouseLeave={() => setIsHoverMore(false)} type='text' className='more-indicator' icon={<MoreOutlined style={{ color: '#858585', fontSize: '1.1em' }} />} />
           </Dropdown>
         </StyledEventTaskItemContent>
       </StyledEventTaskItem>

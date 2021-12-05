@@ -23,6 +23,7 @@ const initialValues = {
 }
 
 const CategoryModal = ({ action = 'create', onHide, overrideInitialValues = {}, ...rest }) => {
+  console.log('category render')
   const { addData, updateData } = useContext(DataContext)
   const { isAuthenticate } = useContext(AuthContext)
 

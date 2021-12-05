@@ -34,7 +34,9 @@ const eventReducer = (state, action) => {
     case UPDATE_EVENT:
       const temp = [...state]
       let index = temp.findIndex(e => e._id === action.payload._id)
+      console.log('before', temp[index])
       temp[index] = action.payload
+      console.log('after', temp[index])
       return temp
     case DELETE_EVENT:
       return state.filter(e => e._id !== action.payload)

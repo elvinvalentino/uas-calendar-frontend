@@ -4,12 +4,13 @@ import { useTheme } from 'styled-components'
 import FullCalendar from '@fullcalendar/react'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import interactionPlugin from '@fullcalendar/interaction'
-import { Modal } from 'react-bootstrap'
 
 import { DataContext } from '../../contexts/data'
 import Service from '../../utils/Service'
 import EventTaskModal from '../EventTaskModal'
+import EventDetailModal from '../EventDetailModal'
 import { useModal } from '../../hooks/useModal'
+
 
 
 const Calendar = ({ calendarRef }) => {
@@ -90,6 +91,7 @@ const Calendar = ({ calendarRef }) => {
         show={isEventDetailOpen}
         onHide={handleEventDetailClose}
         event={selectedEvent}
+        onOpen={handleEventDetailOpen}
         centered
       />
       <FullCalendar
@@ -107,22 +109,11 @@ const Calendar = ({ calendarRef }) => {
           if (info.event.extendedProps.isPreset) return
           setSelectedEvent(info.event.extendedProps)
           handleEventDetailOpen()
-          // alert(info.event.extendedProps._id)
         }}
       />
     </>
   )
 
-}
-
-const EventDetailModal = ({ onHide, event, ...rest }) => {
-  return (
-    <Modal onHide={onHide} {...rest}>
-      <Modal.Body>
-        {event._id} {event.title}
-      </Modal.Body>
-    </Modal>
-  )
 }
 
 

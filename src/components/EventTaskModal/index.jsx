@@ -46,7 +46,7 @@ const getInitialValues = () => {
   }
 }
 
-const EventTaskModal = ({ action = 'create', onHide, overrideInitialValues = {}, ...rest }) => {
+const EventTaskModal = ({ action = 'create', onHide, overrideInitialValues = {}, afterClose, afterSubmit, ...rest }) => {
   const { addData, updateData, categories } = useContext(DataContext)
   const { isAuthenticate } = useContext(AuthContext)
 
@@ -66,19 +66,28 @@ const EventTaskModal = ({ action = 'create', onHide, overrideInitialValues = {},
     }
 
 
+    let responseData = null
     if (action === 'create') {
       const response = await Service.addEvent(token, formattedValues);
       addData('event', response)
+      responseData = response
     } else {
       const response = await Service.updateEvent(token, values._id, formattedValues);
       updateData('event', response)
+      responseData = response
     }
 
     onHide()
+    afterSubmit && afterSubmit(responseData)
+  }
+
+  const onClose = () => {
+    onHide()
+    afterClose && afterClose()
   }
 
   return (
-    <Modal onHide={onHide} {...rest}>
+    <Modal onHide={onClose} {...rest}>
       <Formik
         onSubmit={onSubmit}
         initialValues={{ ...initialValues, ...overrideInitialValues }}
@@ -218,7 +227,7 @@ const EventTaskModal = ({ action = 'create', onHide, overrideInitialValues = {},
               </Form.Item>
             </Modal.Body>
             <Modal.Footer>
-              <Button disabled={isSubmitting} onClick={onHide}>
+              <Button disabled={isSubmitting} onClick={onClose}>
                 Close
               </Button>
               <Button htmlType='submit' type='primary' loading={isSubmitting}>
