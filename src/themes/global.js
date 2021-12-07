@@ -137,6 +137,9 @@ export const GlobalStyles = createGlobalStyle`
 
   .ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled) {
     background-color: ${p => p.theme.color.primary};
+  }
+  
+  .ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled) span {
     color: #fff
   }
 
