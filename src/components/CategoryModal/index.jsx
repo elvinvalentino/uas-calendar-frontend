@@ -4,6 +4,7 @@ import * as yup from 'yup'
 import { Modal } from 'react-bootstrap'
 import { Formik } from 'formik'
 import { HexColorPicker } from "react-colorful";
+import { useTheme } from 'styled-components'
 
 import { DataContext } from '../../contexts/data'
 import { AuthContext } from '../../contexts/auth'
@@ -25,6 +26,7 @@ const initialValues = {
 const CategoryModal = ({ action = 'create', onHide, overrideInitialValues = {}, ...rest }) => {
   const { addData, updateData, changeEventColor } = useContext(DataContext)
   const { isAuthenticate } = useContext(AuthContext)
+  const theme = useTheme()
 
   const onSubmit = async (values) => {
     if (!isAuthenticate) return
@@ -55,7 +57,7 @@ const CategoryModal = ({ action = 'create', onHide, overrideInitialValues = {}, 
             onFinish={handleSubmit}
             layout='vertical'
           >
-            <Modal.Header closeButton>
+            <Modal.Header closeButton closeVariant={theme.type === 'dark' ? 'white' : null}>
               <Modal.Title>{action === 'create' ? 'Add' : 'Edit'} Category</Modal.Title>
             </Modal.Header>
             <Modal.Body>

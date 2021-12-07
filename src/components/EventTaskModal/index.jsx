@@ -13,6 +13,7 @@ import {
   Typography
 } from 'antd'
 import { Modal } from 'react-bootstrap'
+import { useTheme } from 'styled-components'
 import { Formik } from 'formik'
 import moment from 'moment';
 import * as yup from 'yup'
@@ -64,6 +65,7 @@ const getInitialValues = () => {
 const EventTaskModal = ({ action = 'create', onHide, overrideInitialValues = {}, afterClose, afterSubmit, ...rest }) => {
   const { addData, updateData, categories } = useContext(DataContext)
   const { isAuthenticate } = useContext(AuthContext)
+  const theme = useTheme()
 
   const [category, setCategory] = useState('')
   const initialValues = getInitialValues()
@@ -102,7 +104,7 @@ const EventTaskModal = ({ action = 'create', onHide, overrideInitialValues = {},
   }
 
   return (
-    <Modal onHide={onClose} {...rest}>
+    <Modal onHide={onClose} {...rest} >
       <Formik
         onSubmit={onSubmit}
         initialValues={{ ...initialValues, ...overrideInitialValues }}
@@ -113,7 +115,7 @@ const EventTaskModal = ({ action = 'create', onHide, overrideInitialValues = {},
             onFinish={handleSubmit}
             layout='vertical'
           >
-            <Modal.Header closeButton>
+            <Modal.Header closeButton closeVariant={theme.type === 'dark' ? 'white' : null}>
               <Modal.Title>{action === 'create' ? 'Add' : 'Edit'} {values.type}</Modal.Title>
             </Modal.Header>
             <Modal.Body>

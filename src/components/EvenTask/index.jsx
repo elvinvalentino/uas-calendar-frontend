@@ -1,4 +1,5 @@
 import { useContext, useState } from 'react'
+import { useTheme } from 'styled-components'
 import { Stack } from 'react-bootstrap'
 import { Typography, Button, Dropdown, Modal } from 'antd'
 import Card from '../Core/Card'
@@ -23,6 +24,7 @@ import moment from 'moment'
 const { Title, Text } = Typography
 
 const EventTask = ({ setIsExpanded, goToDate }) => {
+  const theme = useTheme()
   const { login } = useContext(AuthContext)
 
   const responseGoogle = async (response) => {
@@ -47,14 +49,14 @@ const EventTask = ({ setIsExpanded, goToDate }) => {
     <Stack gap={2} className='position-relative h-100'>
       <Button
         type="text"
-        icon={<LeftOutlined style={{ color: '#ccc' }} />}
+        icon={<LeftOutlined style={{ color: theme.fontColor.main }} />}
         className='position-absolute top-0 end-0'
         onClick={() => setIsExpanded(false)}
       />
       <Title level={5} style={{ textAlign: 'center', marginBottom: 5 }}>My Tasks & Events</Title>
       <Tasks signIn={signIn} goToDate={goToDate} />
       <Events signIn={signIn} goToDate={goToDate} />
-    </Stack>
+    </Stack >
   )
 }
 

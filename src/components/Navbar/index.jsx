@@ -10,6 +10,7 @@ import moment from 'moment';
 import axios from '../../axios'
 import { NavbarContainer, NavbarSide, NavbarCenter, NavbarContent, NavbarContentText } from './components'
 import { getDateRange } from '../../utils/date';
+import { useTheme } from 'styled-components';
 
 const { Text } = Typography
 
@@ -49,7 +50,9 @@ const Navbar = ({ date, prevMonth, nextMonth, today, goToDate }) => {
 
   return (
     <NavbarContainer>
-      <NavbarSide>{time}</NavbarSide>
+      <NavbarSide>
+        <Text>{time}</Text>
+      </NavbarSide>
       <NavbarCenter>
         <NavbarContent>
           <Button shape='circle' icon={<LeftOutlined />} onClick={prevMonth} />
@@ -86,6 +89,8 @@ const Navbar = ({ date, prevMonth, nextMonth, today, goToDate }) => {
 }
 
 const AvatarMenu = ({ onChangeAccount, onLogout }) => {
+  const theme = useTheme()
+
   const menuStyle = {
     boxShadow: '1px 3px 5px #ccc'
   }

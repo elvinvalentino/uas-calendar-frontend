@@ -22,11 +22,12 @@ import axios from '../../axios'
 const { Title, Text } = Typography
 
 const CalendarCategories = ({ setIsExpanded, date, setDate, goToDate }) => {
+  const theme = useTheme()
   return (
     <Stack gap={2} className='position-relative h-100'>
       <Button
         type="text"
-        icon={<RightOutlined style={{ color: '#ccc' }} />}
+        icon={<RightOutlined style={{ color: theme.fontColor.main }} />}
         className='position-absolute top-0 start-0'
         onClick={() => setIsExpanded(false)}
       />
@@ -106,7 +107,8 @@ const CategoryItem = ({ category }) => {
       content: `Are you sure want to delete this category?`,
       okText: 'Delete',
       cancelText: 'Close',
-      okType: 'danger',
+      okType: 'primary',
+      okButtonProps: { danger: true },
       centered: true,
       onOk: async () => {
         if (!isAuthenticate) return

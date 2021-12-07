@@ -9,7 +9,7 @@ export const NotFoundContainer = styled.div`
   padding: 5px 12px;
 
   &:hover {
-    background-color: #f5f5f5;
+    background-color: ${p => p.theme.color.hover};
   }
 `;
 

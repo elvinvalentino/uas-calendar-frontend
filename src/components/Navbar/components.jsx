@@ -10,8 +10,10 @@ export const NavbarContainer = styled.div`
   height: ${p => p.theme.navbarHeight};
   padding: 1em;
   margin-bottom: 1em;
-  background-color: #fff;
-  box-shadow: 1px 1px 10px #ccc;
+  background-color: ${p => p.theme.backgroundColor.main};
+  ${p => p.theme.type !== 'dark' && css`
+    box-shadow: 1px 1px 10px #ccc;
+  `}
 `;
 
 export const NavbarSide = styled.div`

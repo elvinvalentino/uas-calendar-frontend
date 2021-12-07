@@ -4,7 +4,7 @@ import App from './App';
 import DateAdapter from '@mui/lab/AdapterMoment';
 import { LocalizationProvider } from '@mui/lab';
 import { ThemeProvider } from 'styled-components';
-import { theme } from './themes/theme';
+import { darkTheme, lightTheme } from './themes/theme';
 
 import { AuthProvider } from './contexts/auth';
 import { DataProvider } from './contexts/data';
@@ -13,7 +13,7 @@ import 'antd/dist/antd.css';
 
 ReactDOM.render(
   <React.StrictMode>
-    <ThemeProvider theme={theme}>
+    <ThemeProvider theme={lightTheme}>
       <AuthProvider>
         <DataProvider>
           <LocalizationProvider dateAdapter={DateAdapter}>

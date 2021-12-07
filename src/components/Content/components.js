@@ -20,6 +20,6 @@ export const ExpandIndicator = styled.div`
         `}
   width: 15px;
   height: 40px;
-  background-color: #1890ff;
+  background-color: ${p => p.theme.color.primary};
   cursor: pointer;
 `;

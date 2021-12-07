@@ -71,6 +71,7 @@ const EventDetailModal = ({ onHide, onOpen, event: receivedEvent, ...rest }) => 
 
   const actionIconStyle = (isDanger = false) => ({
     fontSize: '1.2em',
+    color: theme.fontColor.main,
     ...(isDanger && {
       color: theme.color.danger
     })
@@ -148,7 +149,7 @@ const EventDetailModal = ({ onHide, onOpen, event: receivedEvent, ...rest }) => 
           </EventDetailHeaderContainer>
           <EventDetailContent>
             <EventDetailContentList>
-              <CalendarOutlined style={{ fontSize: '1.6em' }} />
+              <CalendarOutlined style={{ fontSize: '1.6em', color: theme.fontColor.main }} />
               {event.isAllDay ? (
                 <Text className='ms-4'>
                   {isSameDay(event.dateStart, event.dateEnd) && `${getFormattedDate(event.dateStart)}, All day`}
@@ -165,13 +166,13 @@ const EventDetailModal = ({ onHide, onOpen, event: receivedEvent, ...rest }) => 
               )}
             </EventDetailContentList>
             <EventDetailContentList>
-              <AlignLeftOutlined style={{ fontSize: '1.6em' }} />
+              <AlignLeftOutlined style={{ fontSize: '1.6em', color: theme.fontColor.main }} />
               <Text className='ms-4'>
                 {event.description || 'No Description'}
               </Text>
             </EventDetailContentList>
             <EventDetailContentList>
-              <TagOutlined style={{ fontSize: '1.6em' }} />
+              <TagOutlined style={{ fontSize: '1.6em', color: theme.fontColor.main }} />
               <Text className='ms-4'>
                 {event.category?.name}
               </Text>

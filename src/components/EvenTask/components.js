@@ -26,7 +26,7 @@ export const StyledEventTaskItem = styled.div`
     top: -1px;
     bottom: -1px;
     width: 22px;
-    background-color: #fff;
+    background-color: ${p => p.theme.backgroundColor.main};
     border-radius: 10px;
     z-index: 100;
   }
