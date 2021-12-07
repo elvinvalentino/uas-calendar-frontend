@@ -4,7 +4,7 @@ import App from './App';
 import DateAdapter from '@mui/lab/AdapterMoment';
 import { LocalizationProvider } from '@mui/lab';
 import { ThemeProvider } from 'styled-components';
-import { darkTheme, lightTheme } from './themes/theme';
+import { lightTheme } from './themes/theme';
 
 import { AuthProvider } from './contexts/auth';
 import { DataProvider } from './contexts/data';
