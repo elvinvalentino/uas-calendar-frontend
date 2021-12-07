@@ -4,12 +4,15 @@ import { useTheme } from 'styled-components'
 import FullCalendar from '@fullcalendar/react'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import interactionPlugin from '@fullcalendar/interaction'
+import { useGoogleLogin } from 'react-google-login';
 
 import { DataContext } from '../../contexts/data'
+import { AuthContext } from '../../contexts/auth'
 import Service from '../../utils/Service'
 import EventTaskModal from '../EventTaskModal'
 import EventDetailModal from '../EventDetailModal'
 import { useModal } from '../../hooks/useModal'
+import axios from '../../axios'
 
 
 
@@ -25,7 +28,6 @@ const Calendar = ({ calendarRef }) => {
   const theme = useTheme()
 
   useEffect(() => {
-    console.log('fetch');
     (async () => {
       try {
         const response = await Service.fetchNationalHoliday()
@@ -36,9 +38,32 @@ const Calendar = ({ calendarRef }) => {
     })()
   }, [])
 
+  const { login, isAuthenticate } = useContext(AuthContext)
+
+  const responseGoogle = async (response) => {
+    if (response.error) return console.log(response)
+    const { email, name, imageUrl } = response.profileObj
+    const { data } = await axios.post('/api/users', {
+      email,
+      username: name,
+      profilePicture: imageUrl,
+    })
+
+    login(data)
+  }
+
+  const { signIn } = useGoogleLogin({
+    clientId: process.env.REACT_APP_GOOGLE_CLIENTID,
+    onSuccess: responseGoogle,
+    cookiePolicy: 'single_host_origin'
+  })
 
   const onSelect = ({ start, end }) => {
-    console.log('onSelect');
+    if (!isAuthenticate) {
+      signIn()
+      return
+    }
+
     start = moment(start)
     end = moment(end).subtract(1, 'day')
     setSelectedDateRange([start, end])
@@ -50,7 +75,7 @@ const Calendar = ({ calendarRef }) => {
       title: nh.holiday_name,
       start: nh.holiday_date,
       allDay: true,
-      color: '#0E743F',
+      color: theme.color.holiday,
       extendedProps: {
         isPreset: true
       }

@@ -1,15 +1,30 @@
-import { useState, useContext } from 'react'
-import { Form, Input, Radio, Checkbox, DatePicker, TimePicker, Button, Row, Col, Select, Typography } from 'antd'
+import { useState, useContext, memo } from 'react'
+import {
+  Form,
+  Input,
+  Radio,
+  Checkbox,
+  DatePicker,
+  TimePicker,
+  Button,
+  Row,
+  Col,
+  Select,
+  Typography
+} from 'antd'
 import { Modal } from 'react-bootstrap'
 import { Formik } from 'formik'
 import moment from 'moment';
 import * as yup from 'yup'
+import { HexColorPicker } from "react-colorful";
+
 
 import { NotFoundContainer, CircleIndicator } from './components'
 import { DataContext } from '../../contexts/data'
 import { AuthContext } from '../../contexts/auth'
 import Service from '../../utils/Service'
 import { getToken } from '../../utils/getToken';
+import { useModal } from '../../hooks/useModal';
 
 
 const { TextArea } = Input
@@ -209,8 +224,8 @@ const EventTaskModal = ({ action = 'create', onHide, overrideInitialValues = {},
                   value={values.categoryId ? values.categoryId : null}
                   placeholder="Select a category"
                   dropdownStyle={{ zIndex: 99999999 }}
-                  onSearch={value => setCategory(value)}
-                  notFoundContent={<SelectNotFound text={category} />}
+                  onSearch={value => Boolean(value !== '') && setCategory(value)}
+                  notFoundContent={<SelectNotFound text={category} setFieldValue={setFieldValue} />}
                   optionFilterProp='data'
                   onChange={value => setFieldValue('categoryId', value)}
                   onBlur={() => setFieldTouched('categoryId')}
@@ -241,12 +256,66 @@ const EventTaskModal = ({ action = 'create', onHide, overrideInitialValues = {},
   )
 }
 
-const SelectNotFound = ({ text }) => {
+const SelectNotFound = memo(({ text, setFieldValue }) => {
+  const { handleOpen, handleClose, isOpen } = useModal()
   return (
-    <NotFoundContainer onClick={() => console.log('Show color picker')}>
-      <Text>+ Create "{text}"</Text>
-    </NotFoundContainer>
+    <>
+      <ColorPickerModal
+        show={isOpen}
+        onHide={handleClose}
+        name={text}
+        centered
+        backdrop='static'
+        setFieldValue={setFieldValue}
+      />
+      <NotFoundContainer onClick={handleOpen}>
+        <Text>+ Create "{text}"</Text>
+      </NotFoundContainer>
+    </>
   )
-}
+})
 
-export default EventTaskModal
+const ColorPickerModal = memo(({ onHide, name, setFieldValue, ...rest }) => {
+  const [color, setColor] = useState('#ccc')
+  const [isSubmitting, setIsSubmitting] = useState(false)
+
+  const { addData } = useContext(DataContext)
+  const { isAuthenticate } = useContext(AuthContext)
+
+  const handleSubmit = async () => {
+    if (!isAuthenticate) return
+    const token = getToken()
+
+    setIsSubmitting(true);
+    const response = await Service.addCategory(token, {
+      name,
+      hex: color
+    })
+    addData('category', response)
+    setFieldValue('categoryId', response._id)
+    setIsSubmitting(false)
+    onHide()
+  }
+
+  return (
+    <Modal onHide={onHide}{...rest}>
+      <Modal.Body>
+        <HexColorPicker
+          className='w-100'
+          color={color}
+          onChange={value => setColor(value)}
+        />
+      </Modal.Body>
+      <Modal.Footer>
+        <Button disabled={isSubmitting} onClick={onHide}>
+          Close
+        </Button>
+        <Button htmlType='submit' type='primary' loading={isSubmitting} onClick={handleSubmit}>
+          Save
+        </Button>
+      </Modal.Footer>
+    </Modal>
+  )
+})
+
+export default memo(EventTaskModal)

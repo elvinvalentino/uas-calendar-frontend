@@ -20,7 +20,6 @@ const App = () => {
 
   useEffect(() => {
     if (isAuthenticate) {
-      console.log('fetch');
       (async () => {
         try {
           setIsFetchData(true)
@@ -77,6 +76,7 @@ const App = () => {
         today={today}
         prevMonth={prevMonth}
         nextMonth={nextMonth}
+        goToDate={goToDate}
       />
       <Content
         calendarRef={calendarRef}

@@ -10,6 +10,8 @@ const SET_EVENTS = 'SET_EVENTS'
 const ADD_EVENT = 'ADD_EVENT'
 const UPDATE_EVENT = 'UPDATE_EVENT'
 const DELETE_EVENT = 'DELETE_EVENT'
+const CHANGE_EVENT_COLOR = 'CHANGE_EVENT_COLOR'
+const CHANGE_EVENT_COLOR_TO_PRESET = 'CHANGE_EVENT_COLOR_TO_PRESET'
 
 const eventInitialState = []
 const categoryInitialState = []
@@ -22,7 +24,9 @@ const DataContext = createContext({
   setData: () => null,
   addData: () => null,
   updateData: () => null,
-  deleteData: () => null
+  deleteData: () => null,
+  changeEventColor: () => null,
+  changeEventColorToPreset: () => null
 });
 
 const eventReducer = (state, action) => {
@@ -31,15 +35,34 @@ const eventReducer = (state, action) => {
       return action.payload
     case ADD_EVENT:
       return [...state, action.payload]
-    case UPDATE_EVENT:
+    case UPDATE_EVENT: {
       const temp = [...state]
       let index = temp.findIndex(e => e._id === action.payload._id)
-      console.log('before', temp[index])
       temp[index] = action.payload
-      console.log('after', temp[index])
       return temp
+    }
     case DELETE_EVENT:
       return state.filter(e => e._id !== action.payload)
+    case CHANGE_EVENT_COLOR: {
+      const temp = [...state]
+      const changedEvents = temp.filter(e => e.category._id === action.payload._id);
+      for (const changedEvent of changedEvents) {
+        let index = temp.findIndex(e => e._id === changedEvent._id)
+        temp[index].category = action.payload
+        temp[index].categoryId = action.payload._id
+      }
+      return temp
+    }
+    case CHANGE_EVENT_COLOR_TO_PRESET: {
+      const temp = [...state]
+      const changedEvents = temp.filter(e => e.category._id === action.payload.oldCategoryId);
+      for (const changedEvent of changedEvents) {
+        let index = temp.findIndex(e => e._id === changedEvent._id)
+        temp[index].category = action.payload.newCategory
+        temp[index].categoryId = action.payload.newCategory._id
+      }
+      return temp
+    }
     default:
       return state
   }
@@ -100,6 +123,20 @@ const DataProvider = ({ ...props }) => {
     }
   }, [])
 
+  const changeEventColor = useCallback((payload) => {
+    eventDispatch({ type: CHANGE_EVENT_COLOR, payload })
+  }, [])
+
+  const changeEventColorToPreset = useCallback((payload) => {
+    eventDispatch({
+      type: CHANGE_EVENT_COLOR_TO_PRESET,
+      payload: {
+        oldCategoryId: payload,
+        newCategory: categories[0]
+      }
+    })
+  }, [categories])
+
   return (
     <DataContext.Provider
       value={{
@@ -110,7 +147,9 @@ const DataProvider = ({ ...props }) => {
         updateData,
         deleteData,
         isFetchData,
-        setIsFetchData
+        setIsFetchData,
+        changeEventColor,
+        changeEventColorToPreset
       }}
       {...props}
     />

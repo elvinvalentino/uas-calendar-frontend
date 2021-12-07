@@ -2,6 +2,7 @@ import { useContext, useState } from 'react'
 import { Stack } from 'react-bootstrap'
 import { Typography, Button, Dropdown, Modal } from 'antd'
 import Card from '../Core/Card'
+import { useGoogleLogin } from 'react-google-login';
 import { MoreOutlined, LeftOutlined, ExclamationCircleOutlined } from '@ant-design/icons'
 
 import ListMenu from '../ListMenu'
@@ -14,13 +15,34 @@ import { AuthContext } from '../../contexts/auth'
 import Service from '../../utils/Service'
 import { getToken } from '../../utils/getToken';
 import { getFormattedDate } from '../../utils/date'
+import axios from '../../axios';
 
 import moment from 'moment'
 
 
 const { Title, Text } = Typography
 
-const EventTask = ({ setIsExpanded }) => {
+const EventTask = ({ setIsExpanded, goToDate }) => {
+  const { login } = useContext(AuthContext)
+
+  const responseGoogle = async (response) => {
+    if (response.error) return console.log(response)
+    const { email, name, imageUrl } = response.profileObj
+    const { data } = await axios.post('/api/users', {
+      email,
+      username: name,
+      profilePicture: imageUrl,
+    })
+
+    login(data)
+  }
+
+  const { signIn } = useGoogleLogin({
+    clientId: process.env.REACT_APP_GOOGLE_CLIENTID,
+    onSuccess: responseGoogle,
+    cookiePolicy: 'single_host_origin'
+  })
+
   return (
     <Stack gap={2} className='position-relative h-100'>
       <Button
@@ -30,17 +52,27 @@ const EventTask = ({ setIsExpanded }) => {
         onClick={() => setIsExpanded(false)}
       />
       <Title level={5} style={{ textAlign: 'center', marginBottom: 5 }}>My Tasks & Events</Title>
-      <Tasks />
-      <Events />
+      <Tasks signIn={signIn} goToDate={goToDate} />
+      <Events signIn={signIn} goToDate={goToDate} />
     </Stack>
   )
 }
 
-const Tasks = () => {
+const Tasks = ({ signIn, goToDate }) => {
   const { isOpen, handleOpen, handleClose } = useModal()
   const { events, isFetchData } = useContext(DataContext)
+  const { isAuthenticate } = useContext(AuthContext)
 
   const filteredEvents = events.filter(e => e.type === 'Task')
+
+  const openModal = () => {
+    if (!isAuthenticate) {
+      signIn()
+      return
+    }
+
+    handleOpen()
+  }
 
   return (
     <>
@@ -53,24 +85,35 @@ const Tasks = () => {
         centered
         backdrop='static'
       />
-      <Card title="My Tasks" onExtraClick={handleOpen}>
+      <Card title="My Tasks" onExtraClick={openModal}>
         {isFetchData && <LoadingIndicator />}
         {!isFetchData && filteredEvents.length === 0 && (
           <Text>Task is empty. Press + to add task</Text>
         )}
         {!isFetchData && filteredEvents.map(e => (
-          <EventTaskItem data={e} />
+          <EventTaskItem key={e._id} data={e} goToDate={goToDate} />
         ))}
       </Card>
     </>
   )
 }
 
-const Events = () => {
+const Events = ({ signIn, goToDate }) => {
   const { isOpen, handleOpen, handleClose } = useModal()
   const { events, isFetchData } = useContext(DataContext)
 
+  const { isAuthenticate } = useContext(AuthContext)
+
   const filteredEvents = events.filter(e => e.type === 'Event')
+
+  const openModal = () => {
+    if (!isAuthenticate) {
+      signIn()
+      return
+    }
+
+    handleOpen()
+  }
 
   return (
     <>
@@ -83,20 +126,20 @@ const Events = () => {
         centered
         backdrop='static'
       />
-      <Card title="My Events" onExtraClick={handleOpen}>
+      <Card title="My Events" onExtraClick={openModal}>
         {isFetchData && <LoadingIndicator />}
         {!isFetchData && filteredEvents.length === 0 && (
           <Text>Event is empty. Press + to add event</Text>
         )}
         {!isFetchData && filteredEvents.map(e => (
-          <EventTaskItem data={e} />
+          <EventTaskItem key={e._id} data={e} goToDate={goToDate} />
         ))}
       </Card>
     </>
   )
 }
 
-const EventTaskItem = ({ data, type }) => {
+const EventTaskItem = ({ data, type, goToDate }) => {
   const [isHoverMore, setIsHoverMore] = useState(false)
   const { handleClose, handleOpen, isOpen } = useModal()
   const { deleteData, updateData } = useContext(DataContext)
@@ -178,13 +221,31 @@ const EventTaskItem = ({ data, type }) => {
           </div>
           <Dropdown
             overlay={
-              <ListMenu onEditClick={handleOpen} onDeleteClick={deleteConfirm} type={data.type.toLowerCase()} />
+              <ListMenu
+                onEditClick={handleOpen}
+                onDeleteClick={deleteConfirm}
+                type={data.type.toLowerCase()}
+                onMouseEnter={() => setIsHoverMore(true)}
+                onMouseLeave={() => setIsHoverMore(false)}
+                goToDate={goToDate}
+                destinationDate={data.dateStart}
+              />
             }
             placement='bottomRight'
             trigger={['click']}
             overlayStyle={{ zIndex: 99999999 }}
           >
-            <Button onMouseEnter={() => setIsHoverMore(true)} onMouseLeave={() => setIsHoverMore(false)} type='text' className='more-indicator' icon={<MoreOutlined style={{ color: '#858585', fontSize: '1.1em' }} />} />
+            <Button
+              onMouseEnter={() => setIsHoverMore(true)}
+              onMouseLeave={() => setIsHoverMore(false)}
+              type='text'
+              className='more-indicator'
+              icon={
+                <MoreOutlined
+                  style={{ color: '#858585', fontSize: '1.1em' }}
+                />
+              }
+            />
           </Dropdown>
         </StyledEventTaskItemContent>
       </StyledEventTaskItem>

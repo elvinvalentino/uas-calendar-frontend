@@ -10,6 +10,7 @@ export const theme = {
     secondary: '#e6f7ff',
     highlight: 'rgba(255,220,40,.15)',
     danger: '#ff4d4f',
+    holiday: '#0E743F',
   },
   backgroundColor: {
     main: '#fff',

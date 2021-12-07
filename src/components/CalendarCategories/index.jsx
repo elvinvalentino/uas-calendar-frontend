@@ -1,6 +1,8 @@
 import { useContext } from 'react'
+import { useTheme } from 'styled-components'
 import { Stack } from 'react-bootstrap'
 import { Button, Typography, Dropdown, Modal } from 'antd'
+import { useGoogleLogin } from 'react-google-login';
 import { RightOutlined, MoreOutlined, ExclamationCircleOutlined } from '@ant-design/icons'
 
 import Card from '../Core/Card'
@@ -14,6 +16,7 @@ import { DataContext } from '../../contexts/data'
 import { AuthContext } from '../../contexts/auth'
 import { getToken } from '../../utils/getToken'
 import Service from '../../utils/Service'
+import axios from '../../axios'
 
 
 const { Title, Text } = Typography
@@ -37,6 +40,36 @@ const CalendarCategories = ({ setIsExpanded, date, setDate, goToDate }) => {
 const Categories = () => {
   const { handleClose, handleOpen, isOpen } = useModal()
   const { categories, isFetchData } = useContext(DataContext)
+  const theme = useTheme()
+
+  const { login, isAuthenticate } = useContext(AuthContext)
+
+  const responseGoogle = async (response) => {
+    if (response.error) return console.log(response)
+    const { email, name, imageUrl } = response.profileObj
+    const { data } = await axios.post('/api/users', {
+      email,
+      username: name,
+      profilePicture: imageUrl,
+    })
+
+    login(data)
+  }
+
+  const { signIn } = useGoogleLogin({
+    clientId: process.env.REACT_APP_GOOGLE_CLIENTID,
+    onSuccess: responseGoogle,
+    cookiePolicy: 'single_host_origin'
+  })
+
+  const openModal = () => {
+    if (!isAuthenticate) {
+      signIn()
+      return
+    }
+
+    handleOpen()
+  }
 
   return (
     <>
@@ -46,13 +79,15 @@ const Categories = () => {
         centered
         backdrop='static'
       />
-      <Card title="My Categories" onExtraClick={handleOpen}>
+      <Card title="My Categories" onExtraClick={openModal}>
+        {!isFetchData && <CategoryItem category={{
+          name: 'Holiday in Indonesia',
+          hex: theme.color.holiday,
+          isPreset: true
+        }} />}
         {isFetchData && <LoadingIndicator />}
-        {!isFetchData && categories.length === 0 && (
-          <Text>Category is empty. Press + to add category</Text>
-        )}
         {!isFetchData && categories.map(c => (
-          <CategoryItem category={c} />
+          <CategoryItem key={c._id} category={c} />
         ))}
       </Card>
     </>
@@ -61,7 +96,7 @@ const Categories = () => {
 
 const CategoryItem = ({ category }) => {
   const { handleClose, handleOpen, isOpen } = useModal()
-  const { deleteData } = useContext(DataContext)
+  const { deleteData, changeEventColorToPreset } = useContext(DataContext)
   const { isAuthenticate } = useContext(AuthContext)
 
   const deleteConfirm = () => {
@@ -78,6 +113,7 @@ const CategoryItem = ({ category }) => {
         const token = getToken()
         await Service.deleteCategory(token, category._id)
         deleteData('category', category._id)
+        changeEventColorToPreset(category._id)
       }
     })
   }

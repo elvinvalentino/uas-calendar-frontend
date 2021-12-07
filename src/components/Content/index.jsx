@@ -31,7 +31,7 @@ const Content = ({ calendarRef, date, setDate, goToDate }) => {
     <Container fluid>
       <Row gutter={8}>
         {isExpandedLeft && <Col span={5} style={{ maxHeight }}>
-          <EventTask setIsExpanded={setIsExpandedLeft} />
+          <EventTask setIsExpanded={setIsExpandedLeft} goToDate={goToDate} />
         </Col>}
         <Col span={calendarSpan} ref={calendarContainer} style={{
           ...(!isExpandedRight && {

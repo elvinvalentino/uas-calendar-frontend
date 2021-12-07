@@ -1,7 +1,8 @@
 import { Menu } from 'antd'
-import { EditOutlined, DeleteOutlined } from '@ant-design/icons'
+import moment from 'moment'
+import { EditOutlined, DeleteOutlined, CalendarOutlined } from '@ant-design/icons'
 
-const ListMenu = ({ onEditClick, onDeleteClick, type }) => {
+const ListMenu = ({ onEditClick, onDeleteClick, type, goToDate, destinationDate, ...rest }) => {
   const menuStyle = {
     boxShadow: '1px 3px 5px #ccc'
   }
@@ -12,7 +13,12 @@ const ListMenu = ({ onEditClick, onDeleteClick, type }) => {
   }
 
   return (
-    <Menu style={menuStyle}>
+    <Menu style={menuStyle} {...rest}>
+      {['task', 'event'].includes(type) && (
+        <Menu.Item icon={<CalendarOutlined />} onClick={() => goToDate(moment(destinationDate))} style={menuItemStyle}>
+          Show in Calendar
+        </Menu.Item>
+      )}
       <Menu.Item icon={<EditOutlined />} onClick={onEditClick} style={menuItemStyle}>
         Edit {type}
       </Menu.Item>

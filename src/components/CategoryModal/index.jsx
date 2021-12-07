@@ -23,8 +23,7 @@ const initialValues = {
 }
 
 const CategoryModal = ({ action = 'create', onHide, overrideInitialValues = {}, ...rest }) => {
-  console.log('category render')
-  const { addData, updateData } = useContext(DataContext)
+  const { addData, updateData, changeEventColor } = useContext(DataContext)
   const { isAuthenticate } = useContext(AuthContext)
 
   const onSubmit = async (values) => {
@@ -37,6 +36,8 @@ const CategoryModal = ({ action = 'create', onHide, overrideInitialValues = {}, 
     } else {
       const response = await Service.updateCategory(token, values._id, values);
       updateData('category', response)
+      const isColorChanged = overrideInitialValues.hex !== values.hex
+      if (isColorChanged) changeEventColor(response)
     }
 
     onHide()
