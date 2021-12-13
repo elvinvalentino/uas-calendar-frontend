@@ -1,10 +1,12 @@
 import { useEffect, useState, useContext } from 'react'
+import { useTheme } from 'styled-components'
 import { LeftOutlined, RightOutlined, LogoutOutlined, ReloadOutlined } from '@ant-design/icons'
 import { Button, Avatar, Menu, Dropdown, Modal, Typography } from 'antd'
-import { ExclamationCircleOutlined, DownOutlined } from '@ant-design/icons'
+import { ExclamationCircleOutlined, DownOutlined, BgColorsOutlined } from '@ant-design/icons'
 import { GoogleLogin, useGoogleLogin } from 'react-google-login';
 import { AuthContext } from '../../contexts/auth'
 import { DataContext } from '../../contexts/data'
+import { ThemeContext } from '../../contexts/theme'
 import moment from 'moment';
 
 import axios from '../../axios'
@@ -88,6 +90,19 @@ const Navbar = ({ date, prevMonth, nextMonth, today, goToDate }) => {
 }
 
 const AvatarMenu = ({ onChangeAccount, onLogout }) => {
+  const theme = useTheme()
+  const { setTheme } = useContext(ThemeContext)
+
+  const toggleTheme = () => {
+    if (theme.type === 'light') {
+      setTheme("dark");
+      localStorage.setItem('theme', 'dark')
+    } else {
+      setTheme("light");
+      localStorage.setItem('theme', 'light')
+    }
+  }
+
   const menuStyle = {
     boxShadow: '1px 3px 5px #ccc'
   }
@@ -112,7 +127,10 @@ const AvatarMenu = ({ onChangeAccount, onLogout }) => {
 
   return (
     <Menu style={menuStyle}>
-      <Menu.Item icon={<ReloadOutlined />} onClick={() => onChangeAccount()} style={menuItemStyle}>
+      <Menu.Item icon={<BgColorsOutlined />} onClick={toggleTheme} style={menuItemStyle}>
+        Toggle light / dark theme
+      </Menu.Item>
+      <Menu.Item icon={<ReloadOutlined />} onClick={onChangeAccount} style={menuItemStyle}>
         Change account
       </Menu.Item>
       <Menu.Item icon={<LogoutOutlined />} onClick={logoutConfirm} style={menuItemStyle} danger>

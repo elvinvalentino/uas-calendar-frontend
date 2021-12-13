@@ -109,6 +109,9 @@ export const GlobalStyles = createGlobalStyle`
     color: ${p => p.theme.fontColor.main}
   }
 
+  .ant-picker-cell-selected .ant-picker-calendar-date .ant-picker-calendar-date-value {
+    color: #fff;
+  }
 
   .ant-input,
   .ant-picker,
@@ -145,7 +148,9 @@ export const GlobalStyles = createGlobalStyle`
 
   .ant-select-item:hover,
   .ant-dropdown-menu-item:not(.ant-dropdown-menu-item-danger):hover,
-  .ant-menu:not(.ant-menu-horizontal) .ant-menu-item-danger.ant-menu-item-selected {
+  .ant-menu:not(.ant-menu-horizontal) .ant-menu-item-danger.ant-menu-item-selected,
+  .ant-menu:not(.ant-menu-horizontal) .ant-menu-item-selected,
+  .ant-picker-cell:hover:not(.ant-picker-cell-selected):not(.ant-picker-cell-range-start):not(.ant-picker-cell-range-end):not(.ant-picker-cell-range-hover-start):not(.ant-picker-cell-range-hover-end) .ant-picker-cell-inner {
     background-color:${p => p.theme.color.hover};
   }
 
@@ -154,6 +159,10 @@ export const GlobalStyles = createGlobalStyle`
   }
 
   /* bootstrap override */
+  .modal{
+    z-index: 999999;
+  }
+
   .modal-content {
     border-radius: ${p => p.theme.border.radius}px;
     background-color: ${p => p.theme.backgroundColor.main};

@@ -10,7 +10,7 @@ import SmallCalendar from '../SmallCalendar'
 import ListMenu from '../ListMenu'
 import CategoryModal from '../CategoryModal'
 import LoadingIndicator from '../LoadingIndicator'
-import { CircleIndicator, CategoryItemContainer } from './components'
+import { CircleIndicator, CategoryItemContainer, CategoryText } from './components'
 import { useModal } from '../../hooks/useModal'
 import { DataContext } from '../../contexts/data'
 import { AuthContext } from '../../contexts/auth'
@@ -19,7 +19,7 @@ import Service from '../../utils/Service'
 import axios from '../../axios'
 
 
-const { Title, Text } = Typography
+const { Title } = Typography
 
 const CalendarCategories = ({ setIsExpanded, date, setDate, goToDate }) => {
   const theme = useTheme()
@@ -132,7 +132,7 @@ const CategoryItem = ({ category }) => {
       />
       <CategoryItemContainer className="mb-2">
         <CircleIndicator color={category.hex} />
-        <Text style={{ flex: 1 }}>{category.name}</Text>
+        <CategoryText >{category.name}</CategoryText>
         {!category.isPreset && (
           <Dropdown
             overlay={

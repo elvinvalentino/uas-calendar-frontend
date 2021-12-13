@@ -1,4 +1,6 @@
 import styled from 'styled-components';
+import { Typography } from 'antd';
+const { Text } = Typography;
 
 export const CategoryItemContainer = styled.div`
   display: flex;
@@ -21,4 +23,12 @@ export const CircleIndicator = styled.div`
   background-color: ${p => p.color};
   border-radius: 25px;
   margin-right: 1em;
+`;
+
+export const CategoryText = styled(Text)`
+  flex: 1;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
 `;

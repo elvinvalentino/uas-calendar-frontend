@@ -1,4 +1,6 @@
 import styled, { css } from 'styled-components';
+import { Typography } from 'antd';
+const { Text } = Typography;
 
 export const StyledEventTaskItem = styled.div`
   position: relative;
@@ -61,4 +63,16 @@ export const CircleIndicator = styled.div`
     css`
       background-color: ${p => p.color};
     `}
+`;
+
+export const EventTaskText = styled(Text)`
+  ${p =>
+    p.isChecked &&
+    css`
+      text-decoration: line-through;
+    `}
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
 `;

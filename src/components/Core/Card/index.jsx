@@ -15,7 +15,7 @@ const Card = ({ onExtraClick, ...rest }) => {
     padding: '.5em 1em',
     flex: 1,
     overflow: 'auto',
-    textAlign: 'center'
+    textAlign: 'center',
   }
 
   return <AntdCard

@@ -9,7 +9,7 @@ import { MoreOutlined, LeftOutlined, ExclamationCircleOutlined } from '@ant-desi
 import ListMenu from '../ListMenu'
 import EventTaskModal from '../EventTaskModal'
 import LoadingIndicator from '../LoadingIndicator'
-import { StyledEventTaskItem, StyledEventTaskItemContent, CircleIndicator } from './components'
+import { StyledEventTaskItem, StyledEventTaskItemContent, CircleIndicator, EventTaskText } from './components'
 import { useModal } from '../../hooks/useModal'
 import { DataContext } from '../../contexts/data'
 import { AuthContext } from '../../contexts/auth'
@@ -209,14 +209,10 @@ const EventTaskItem = ({ data, type, goToDate }) => {
       <StyledEventTaskItem color={data.category.hex} className='mb-2' onClick={handleOnClick}>
         <StyledEventTaskItemContent>
           <CircleIndicator color={data.category.hex} checked={data.type === 'Task' ? data.isDone : moment().isAfter(data.dateStart)} />
-          <div className='flex-grow-1'>
-            <Text className='d-block fw-bold' style={{
-              ...((data.type === 'Task' && data.isDone) && {
-                textDecoration: 'line-through'
-              })
-            }}>
+          <div className='flex-grow-1' style={{ width: '65%' }}>
+            <EventTaskText className='fw-bold' isChecked={data.type === 'Task' && data.isDone}>
               {data.title}
-            </Text>
+            </EventTaskText>
             <Text type='secondary'>
               {getFormattedDate(data.dateStart)}
             </Text>
