@@ -119,7 +119,8 @@ const AvatarMenu = ({ onChangeAccount, onLogout }) => {
       content: `Are you sure want to logout?`,
       okText: 'Logout',
       cancelText: 'Cancel',
-      okType: 'danger',
+      okType: 'primary',
+      okButtonProps: { danger: true },
       centered: true,
       onOk: onLogout
     })
@@ -130,7 +131,7 @@ const AvatarMenu = ({ onChangeAccount, onLogout }) => {
       <Menu.Item icon={<BgColorsOutlined />} onClick={toggleTheme} style={menuItemStyle}>
         Toggle light / dark theme
       </Menu.Item>
-      <Menu.Item icon={<ReloadOutlined />} onClick={onChangeAccount} style={menuItemStyle}>
+      <Menu.Item icon={<ReloadOutlined />} onClick={() => onChangeAccount()} style={menuItemStyle}>
         Change account
       </Menu.Item>
       <Menu.Item icon={<LogoutOutlined />} onClick={logoutConfirm} style={menuItemStyle} danger>

@@ -177,7 +177,8 @@ const EventTaskItem = ({ data, type, goToDate }) => {
       content: `Are you sure want to delete this ${type}?`,
       okText: 'Delete',
       cancelText: 'Cancel',
-      okType: 'danger',
+      okType: 'primary',
+      okButtonProps: { danger: true },
       centered: true,
       onOk: async () => {
         if (!isAuthenticate) return
