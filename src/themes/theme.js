@@ -25,6 +25,16 @@ export const lightTheme = {
   borderColor: {
     main: '#d9d9d9',
   },
+  fullcalendar: {
+    popover: {
+      header: {
+        backgroundColor: '#d0d0d04d',
+      },
+      body: {
+        backgroundColor: '#fff',
+      },
+    },
+  },
   ...utilStyles,
 };
 
@@ -48,6 +58,17 @@ export const darkTheme = {
   },
   borderColor: {
     main: '#d9d9d9',
+  },
+  fullcalendar: {
+    popover: {
+      header: {
+        backgroundColor: '#2a2828',
+        fontColor: '#fff',
+      },
+      body: {
+        backgroundColor: '#171717',
+      },
+    },
   },
   ...utilStyles,
 };

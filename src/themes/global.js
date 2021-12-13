@@ -61,6 +61,17 @@ export const GlobalStyles = createGlobalStyle`
     color: ${p => p.theme.fontColor.main}
   }
 
+  .fc-theme-standard .fc-popover-header {
+    background-color: ${p =>
+      p.theme.fullcalendar.popover.header.backgroundColor};
+    color: ${p => p.theme.fontColor.main};
+  }
+
+  .fc .fc-more-popover .fc-popover-body {
+    background-color:  ${p =>
+      p.theme.fullcalendar.popover.body.backgroundColor};
+  }
+
   .ant-radio-button-wrapper:last-child {
     border-radius: 0 ${p => p.theme.border.radius}px  ${p =>
   p.theme.border.radius}px 0;
