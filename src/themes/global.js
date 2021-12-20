@@ -83,7 +83,12 @@ export const GlobalStyles = createGlobalStyle`
   .ant-select-dropdown,
   .ant-dropdown-menu,
   .ant-menu,
-  .ant-modal-content {
+  .ant-modal-content,
+  .ant-picker-header,
+  .ant-picker-footer,
+  .ant-picker-date-panel,
+  .ant-picker-time-panel-column,
+  .ant-picker-time-panel {
     background-color: ${p => p.theme.backgroundColor.main};
   }
 
@@ -116,7 +121,14 @@ export const GlobalStyles = createGlobalStyle`
   .ant-radio-button-wrapper span,
   .ant-dropdown-menu-item:not(.ant-dropdown-menu-item-danger) .ant-dropdown-menu-title-content,
   .ant-menu-item:not(.ant-menu-item-danger),
-  .ant-btn:not(.ant-btn-primary):not(.ant-btn-dangerous) span {
+  .ant-btn:not(.ant-btn-primary):not(.ant-btn-dangerous) span,
+  .ant-picker-super-prev-icon,
+  .ant-picker-prev-icon,
+  .ant-picker-super-next-icon,
+  .ant-picker-next-icon,
+  .ant-picker-header-view,
+  .ant-picker-cell-inner,
+  .ant-picker-time-panel-column > li.ant-picker-time-panel-cell .ant-picker-time-panel-cell-inner {
     color: ${p => p.theme.fontColor.main}
   }
 
@@ -161,8 +173,15 @@ export const GlobalStyles = createGlobalStyle`
   .ant-dropdown-menu-item:not(.ant-dropdown-menu-item-danger):hover,
   .ant-menu:not(.ant-menu-horizontal) .ant-menu-item-danger.ant-menu-item-selected,
   .ant-menu:not(.ant-menu-horizontal) .ant-menu-item-selected,
-  .ant-picker-cell:hover:not(.ant-picker-cell-selected):not(.ant-picker-cell-range-start):not(.ant-picker-cell-range-end):not(.ant-picker-cell-range-hover-start):not(.ant-picker-cell-range-hover-end) .ant-picker-cell-inner {
+  .ant-picker-cell:hover:not(.ant-picker-cell-selected):not(.ant-picker-cell-range-start):not(.ant-picker-cell-range-end):not(.ant-picker-cell-range-hover-start):not(.ant-picker-cell-range-hover-end) .ant-picker-cell-inner,
+  .ant-picker-time-panel-column > li.ant-picker-time-panel-cell-selected .ant-picker-time-panel-cell-inner,
+  .ant-picker-time-panel-column > li.ant-picker-time-panel-cell .ant-picker-time-panel-cell-inner:hover {
     background-color:${p => p.theme.color.hover};
+  }
+
+  .ant-picker-range-arrow::after {
+    border-color: ${p => p.theme.backgroundColor.main} ${p =>
+  p.theme.backgroundColor.main} transparent transparent;
   }
 
   .ant-btn.ant-btn-primary {
